@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ContactList;
+use App\Models\QuoteRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Inertia\Inertia;
+use App\Models\ContactPageContent;
 class ContactController extends Controller
 {
+
     public function send(Request $request)
     {
         $data = $request->validate([
@@ -14,14 +19,19 @@ class ContactController extends Controller
             'message' => 'required|string',
         ]);
 
+        // SAVE TO DATABASE
+        ContactList::create($data);
+
+        // SEND EMAIL
         Mail::raw(
             "New Contact Message\n\n"
             . "Name: {$data['name']}\n"
             . "Email: {$data['email']}\n\n"
             . "Message:\n{$data['message']}",
-            function ($mail) {
+            function ($mail) use ($data) {
                 $mail->to('service@shebzglobalsafety.com')
-                     ->subject('New Contact Message');
+                    ->replyTo($data['email']) // important
+                    ->subject('New Contact Message');
             }
         );
 
@@ -38,6 +48,10 @@ class ContactController extends Controller
             'message' => 'nullable|string',
         ]);
 
+        // SAVE TO DATABASE
+        QuoteRequest::create($data);
+
+        // SEND EMAIL
         $emailBody =
             "New Quote Request\n\n"
             . "Name: {$data['name']}\n"
@@ -55,5 +69,18 @@ class ContactController extends Controller
         });
 
         return back()->with('success', 'Quote request submitted successfully!');
+    }
+
+    public function destroy(ContactList $contact)
+    {
+        $contact->delete();
+
+        return redirect()->back()->with('success', 'Message deleted successfully!');
+    }
+    public function destroyQ(QuoteRequest $quoteRequest)
+    {
+        $quoteRequest->delete();
+
+        return redirect()->back()->with('success', 'Quote request deleted successfully!');
     }
 }

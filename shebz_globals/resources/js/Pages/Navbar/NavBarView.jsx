@@ -5,14 +5,21 @@ import { assets } from "../../assets/assets.js";
 export default function NavBarView() {
     const [open, setOpen] = useState(false);
 
+    // ✅ Close menu function
+    const closeMenu = () => setOpen(false);
+
     return (
         <header>
-            <nav className="bg-[#0025cc] text-white">
+            <nav className="bg-[#0025cc] text-white fixed top-0 left-0 w-full z-50 shadow">
                 <div className="max-w-7xl mx-auto px-4">
                     <div className="relative flex items-center h-20">
 
                         {/* LOGO */}
-                        <Link href="/" className="flex items-center gap-3 z-10 hover:text-yellow-300">
+                        <Link
+                            href="/"
+                            onClick={closeMenu}
+                            className="flex items-center gap-3 z-10 hover:text-yellow-300"
+                        >
                             <img src={assets.logo} className="h-12" alt="Shebz Global" />
                             <h1 className="text-lg md:text-xl font-semibold">
                                 Shebz Global Safety Solutions
@@ -52,16 +59,42 @@ export default function NavBarView() {
                 {open && (
                     <div className="md:hidden bg-[#0025cc] px-4 pb-6">
                         <ul className="flex flex-col gap-4 text-lg">
-                            <li><Link href="/">Home</Link></li>
-                            <li><Link href="/about">About Us</Link></li>
-                            <li><Link href="/Service">Services</Link></li>
-                            <li><Link href="/Solutions">Solutions</Link></li>
-                            <li><Link href="/contact">Contact Us</Link></li>
+
+                            <li>
+                                <Link href="/" onClick={closeMenu}>
+                                    Home
+                                </Link>
+                            </li>
+
+                            <li>
+                                <Link href="/about" onClick={closeMenu}>
+                                    About Us
+                                </Link>
+                            </li>
+
+                            <li>
+                                <Link href="/Service" onClick={closeMenu}>
+                                    Services
+                                </Link>
+                            </li>
+
+                            <li>
+                                <Link href="/Solutions" onClick={closeMenu}>
+                                    Solutions
+                                </Link>
+                            </li>
+
+                            <li>
+                                <Link href="/contact" onClick={closeMenu}>
+                                    Contact Us
+                                </Link>
+                            </li>
 
                             {/* MOBILE QUOTE BUTTON */}
                             <li className="pt-4">
                                 <Link
                                     href={route("quote.form")}
+                                    onClick={closeMenu}
                                     className="block text-center bg-yellow-400 text-[#0025cc] py-3 rounded-lg font-semibold hover:bg-yellow-300 transition"
                                 >
                                     Request a Quote

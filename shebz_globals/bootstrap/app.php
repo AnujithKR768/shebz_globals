@@ -16,7 +16,12 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ]);
 
-        //
+        // REGISTER ROUTE MIDDLEWARE ALIASs
+        $middleware->alias([
+            'admin' => \App\Http\Middleware\AdminOnly::class,
+            'permission' => \App\Http\Middleware\CheckPermission::class,
+        ]);
+
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

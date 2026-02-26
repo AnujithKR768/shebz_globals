@@ -6,8 +6,9 @@ import WhatsAppButton from "../../Components/WhatsAppButton";
 export default function AppLayout({ children }) {
     return (
         <>
+
             <NavBarView />
-            <main>{children}</main>
+            <main className="pt-20">{children}</main>
             <FooterView />
             <WhatsAppButton />
         </>

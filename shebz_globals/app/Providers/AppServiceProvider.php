@@ -13,7 +13,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Force Laravel to use public_html instead of public
+        $this->app->bind('path.public', function() {
+            return base_path('public_html');
+        });
     }
 
     /**

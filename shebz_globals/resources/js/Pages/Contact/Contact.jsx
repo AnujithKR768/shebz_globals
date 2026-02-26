@@ -1,9 +1,9 @@
 import React from "react";
-import { Link, useForm } from "@inertiajs/react";
+import { useForm } from "@inertiajs/react";
 import AppLayout from "../Layout/AppLayout";
 import { FaWhatsapp, FaLinkedin, FaEnvelope } from "react-icons/fa";
 
-export default function Contact() {
+export default function Contact({ content }) {
     const { data, setData, post, processing, errors, reset } = useForm({
         name: "",
         email: "",
@@ -17,13 +17,37 @@ export default function Contact() {
         });
     };
 
+    const pageTitle = content?.page_title ?? "Contact Us";
+    const pageDescription = content?.page_description ?? "";
+
+    const mapEmbed = content?.map_embed_url ?? "https://www.google.com/maps?q=Dubai,UAE&output=embed";
+
+    const rightTitle = content?.right_title ?? "Let's Build a Safer Tomorrow — Together";
+    const rightDescription = content?.right_description ?? "";
+
+    const email = content?.email ?? "service@shebzglobalsafety.com";
+    const website = content?.website ?? "www.shebzglobalsafety.com";
+    const headOffice = content?.head_office ?? "Dubai, UAE — Serving Clients Worldwide";
+
+    const whatsappNumber = content?.whatsapp_number ?? "+971504633498";
+    const whatsappText = content?.whatsapp_text ?? "Hello, I would like to know more about your services";
+
+    const linkedinUrl =
+        content?.linkedin_url ?? "https://www.linkedin.com/company/shebz-global-safety-solutions/";
+
+    const whyTitle =
+        content?.why_title ?? "Why Reach Out to SHEBZ Global Safety Solutions?";
+    const whyDescription = content?.why_description ?? "";
+
+    const whyPoints = content?.why_points ?? [];
+
     return (
         <div className="bg-white">
 
             {/* PAGE HEADER */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pt-12 sm:pt-16 pb-10 text-center md:text-left">
                 <h1 className="text-2xl sm:text-3xl md:text-5xl font-semibold mb-4">
-                    Contact Us
+                    {pageTitle}
                 </h1>
 
                 <p
@@ -38,9 +62,7 @@ export default function Contact() {
                         mx-auto md:mx-0
                     "
                 >
-                    Let's Build a Safer Tomorrow — Together. We'd love to hear from you.
-                    Whether you're a manufacturer, industrial client, or safety innovator,
-                    let's collaborate to make workplaces safer, smarter, and more sustainable.
+                    {pageDescription}
                 </p>
             </section>
 
@@ -54,9 +76,9 @@ export default function Contact() {
                         {/* MAP */}
                         <div className="rounded-xl overflow-hidden shadow border">
                             <iframe
-                                title="Dubai Location"
+                                title="Location"
                                 className="w-full h-[220px] sm:h-[280px] md:h-[300px]"
-                                src="https://www.google.com/maps?q=Dubai,UAE&output=embed"
+                                src={mapEmbed}
                                 loading="lazy"
                             />
                         </div>
@@ -77,7 +99,9 @@ export default function Contact() {
                                     onChange={(e) => setData("name", e.target.value)}
                                     className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500"
                                 />
-                                {errors.name && <p className="text-red-600 text-sm">{errors.name}</p>}
+                                {errors.name && (
+                                    <p className="text-red-600 text-sm">{errors.name}</p>
+                                )}
 
                                 <input
                                     type="email"
@@ -87,7 +111,9 @@ export default function Contact() {
                                     onChange={(e) => setData("email", e.target.value)}
                                     className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500"
                                 />
-                                {errors.email && <p className="text-red-600 text-sm">{errors.email}</p>}
+                                {errors.email && (
+                                    <p className="text-red-600 text-sm">{errors.email}</p>
+                                )}
 
                                 <textarea
                                     name="message"
@@ -97,7 +123,9 @@ export default function Contact() {
                                     onChange={(e) => setData("message", e.target.value)}
                                     className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500"
                                 />
-                                {errors.message && <p className="text-red-600 text-sm">{errors.message}</p>}
+                                {errors.message && (
+                                    <p className="text-red-600 text-sm">{errors.message}</p>
+                                )}
 
                                 <button
                                     type="submit"
@@ -111,12 +139,14 @@ export default function Contact() {
 
                         {/* ICON CONTACTS */}
                         <div className="flex justify-center gap-8 text-2xl text-[#0025cc] pt-4">
-                            <a href="mailto:service@shebzglobalsafety.com" title="Email">
+                            <a href={`mailto:${email}`} title="Email">
                                 <FaEnvelope className="hover:text-red-600 transition" />
                             </a>
 
                             <a
-                                href="https://wa.me/+971504633498?text=Hello,%20I%20would%20like%20to%20know%20more%20about%20your%20services"
+                                href={`https://wa.me/${whatsappNumber.replace("+", "")}?text=${encodeURIComponent(
+                                    whatsappText
+                                )}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 title="WhatsApp"
@@ -125,7 +155,7 @@ export default function Contact() {
                             </a>
 
                             <a
-                                href="https://www.linkedin.com/in/shebz-global-safety-solutions-9416a6395/"
+                                href={linkedinUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 title="LinkedIn"
@@ -140,7 +170,7 @@ export default function Contact() {
 
                         <div className="space-y-6 text-center md:text-left">
                             <h2 className="text-2xl sm:text-3xl font-semibold">
-                                Let's Build a Safer Tomorrow — Together
+                                {rightTitle}
                             </h2>
 
                             <p
@@ -153,21 +183,20 @@ export default function Contact() {
                                     hyphens-auto
                                 "
                             >
-                                Whether you're a manufacturer, industrial client, or safety innovator,
-                                SHEBZ Global Safety Solutions is ready to collaborate with you.
+                                {rightDescription}
                             </p>
 
                             <div className="space-y-2 text-gray-700">
-                                <p><strong>Email:</strong> service@shebzglobalsafety.com</p>
-                                <p><strong>Website:</strong> www.shebzglobalsafety.com</p>
-                                <p><strong>Head Office:</strong> Dubai, UAE — Serving Clients Worldwide</p>
+                                <p><strong>Email:</strong> {email}</p>
+                                <p><strong>Website:</strong> {website}</p>
+                                <p><strong>Head Office:</strong> {headOffice}</p>
                             </div>
                         </div>
 
                         {/* WHY CONTACT US */}
                         <div className="bg-slate-50 rounded-2xl p-8 shadow-lg">
                             <h3 className="text-2xl font-bold text-slate-900 mb-4">
-                                Why Reach Out to SHEBZ Global Safety Solutions?
+                                {whyTitle}
                             </h3>
 
                             <p
@@ -181,15 +210,24 @@ export default function Contact() {
                                     mb-6
                                 "
                             >
-                                We partner with manufacturers, industrial companies, and safety innovators
-                                worldwide to deliver practical, compliant, and performance-driven safety solutions.
+                                {whyDescription}
                             </p>
 
                             <ul className="space-y-3 text-slate-800">
-                                <li className="flex gap-3">✅ Industry-Experienced Safety Professionals</li>
-                                <li className="flex gap-3">🌍 Serving Clients Worldwide</li>
-                                <li className="flex gap-3">⚙️ Digital-First & Remote Support</li>
-                                <li className="flex gap-3">📊 Compliance-Focused, Results-Driven</li>
+                                {whyPoints.length > 0 ? (
+                                    whyPoints.map((point, i) => (
+                                        <li key={i} className="flex gap-3">
+                                            {point}
+                                        </li>
+                                    ))
+                                ) : (
+                                    <>
+                                        <li className="flex gap-3">✅ Industry-Experienced Safety Professionals</li>
+                                        <li className="flex gap-3">🌍 Serving Clients Worldwide</li>
+                                        <li className="flex gap-3">⚙️ Digital-First & Remote Support</li>
+                                        <li className="flex gap-3">📊 Compliance-Focused, Results-Driven</li>
+                                    </>
+                                )}
                             </ul>
                         </div>
 

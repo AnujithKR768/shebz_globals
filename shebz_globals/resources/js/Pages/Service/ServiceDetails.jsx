@@ -1,59 +1,87 @@
-import React from 'react';
-import NavBarView from '../Navbar/NavBarView';
-import FooterView from '../Footer/FooterView';
+import React from "react";
+import AppLayout from "../Layout/AppLayout";
 
 export default function ServiceDetails({ service }) {
-    return (
-        <div>
-        <NavBarView />
-        <section className="max-w-5xl mx-auto px-6 md:px-10 mt-24">
-            <div className="bg-white border border-gray-200 rounded-2xl p-8 md:p-12 shadow-lg">
+    if (!service) {
+        return (
+            <>
 
-                {/* IMAGE */}
-                <div className="flex justify-center mb-10">
-                    <img
-                        src={`/storage/${service.icon}`}
-                        alt={service.title}
-                        className="
-                            w-66 h-66
-                            md:w-85 md:h-85
-                            lg:w-100 lg:h-100
-                            object-contain
-                        "
-                    />
+                <div className="max-w-5xl mx-auto px-6 mt-24 text-center">
+                    <p className="text-gray-500 text-lg">
+                        Service not found.
+                    </p>
                 </div>
 
-                {/* TITLE */}
-                <h1
-                    className="
-                        text-3xl md:text-4xl lg:text-5xl
-                        font-extrabold
-                        text-center
-                        text-gray-900
-                        mb-6
-                    "
-                >
-                    {service.title}
-                </h1>
+            </>
+        );
+    }
 
-                {/* DESCRIPTION */}
-                <p
-                    className="
-                        text-gray-700
-                        text-sm sm:text-base md:text-lg lg:text-xl
-                        leading-relaxed sm:leading-relaxed md:leading-loose
-                        text-justify
-                        break-words
-                        hyphens-auto
-                        max-w-3xl
-                        mx-auto
-                    "
-                >
-                    {service.description}
-                </p>
-            </div>
-        </section>
-        <FooterView />
+    return (
+        <div className="min-h-screen bg-gray-50 flex flex-col">
+
+
+
+            {/* ================= SERVICE DETAILS ================= */}
+            <section className="max-w-5xl w-full mx-auto px-4 sm:px-6 md:px-10 mt-24 mb-16">
+
+                <div className="bg-white border border-gray-200 rounded-2xl p-6 sm:p-8 md:p-12 shadow-lg">
+
+                    {/* IMAGE */}
+                    <div className="flex justify-center mb-10">
+                        {service.icon ? (
+                            <img
+                                src={`/storage/${service.icon}`}
+                                alt={service.title || "Service image"}
+                                className="
+                                    w-full
+                                    max-w-md sm:max-w-lg md:max-w-2xl
+                                    h-auto
+                                    object-contain
+                                "
+                                loading="lazy"
+                            />
+                        ) : (
+                            <div className="w-48 h-48 flex items-center justify-center bg-gray-100 rounded-lg text-gray-400">
+                                No Image
+                            </div>
+                        )}
+                    </div>
+
+                    {/* TITLE */}
+                    <h1
+                        className="
+                            text-2xl sm:text-3xl md:text-4xl lg:text-5xl
+                            font-extrabold
+                            text-center
+                            text-gray-900
+                            mb-6
+                            break-words
+                        "
+                    >
+                        {service.title || "Untitled Service"}
+                    </h1>
+
+                    {/* DESCRIPTION */}
+                    <div className="max-w-3xl mx-auto">
+                        <p
+                            className="
+                                text-gray-700
+                                text-sm sm:text-base md:text-lg lg:text-xl
+                                leading-relaxed md:leading-loose
+                                text-justify
+                                break-words
+                                whitespace-pre-line
+                            "
+                        >
+                            {service.description || "No description available."}
+                        </p>
+                    </div>
+
+                </div>
+            </section>
+
+
         </div>
     );
 }
+ServiceDetails.layout = (page) => <AppLayout>{page}</AppLayout>;
