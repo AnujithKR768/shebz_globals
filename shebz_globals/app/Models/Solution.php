@@ -12,6 +12,8 @@ class Solution extends Model
     'image',
     'position',
     'is_active',
+    'meta_title',
+    'meta_description',
 ];
 
 }

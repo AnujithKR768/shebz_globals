@@ -10,7 +10,7 @@ export default function Create() {
 
         map_embed_url: "https://www.google.com/maps?q=Dubai,UAE&output=embed",
 
-        // ✅ NEW RIGHT SECTION
+        //NEW RIGHT SECTION
         right_title: "Let's Build a Safer Tomorrow — Together",
         right_description:
             "Whether you're a manufacturer, industrial client, or safety innovator, SHEBZ Global Safety Solutions is ready to collaborate with you.",
@@ -38,6 +38,8 @@ export default function Create() {
         ],
 
         is_active: true,
+        meta_title: "",
+        meta_description: ""
     });
 
     const submit = (e) => {
@@ -117,7 +119,7 @@ export default function Create() {
                         />
                     </div>
 
-                    {/* ✅ RIGHT SECTION */}
+                    {/*RIGHT SECTION */}
                     <div className="border rounded-lg p-4 bg-gray-50">
                         <h2 className="font-bold mb-3 text-gray-800">
                             Right Section (Dynamic Text)
@@ -284,6 +286,59 @@ export default function Create() {
                                 </button>
                             </div>
                         ))}
+                    </div>
+
+                    {/* SEO */}
+                    <div className="border rounded-lg p-4 bg-gray-50">
+                        <h2 className="font-bold mb-4 text-gray-800">
+                            SEO
+                        </h2>
+
+                        {/* META TITLE */}
+                        <div className="mb-4">
+                            <label className="block mb-1 font-medium text-gray-700">
+                                Meta Title
+                            </label>
+
+                            <input
+                                type="text"
+                                value={data.meta_title}
+                                onChange={(e) =>
+                                    setData("meta_title", e.target.value)
+                                }
+                                className="w-full border rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                placeholder="Enter meta title"
+                            />
+
+                            {errors.meta_title && (
+                                <p className="text-red-600 text-sm mt-1">
+                                    {errors.meta_title}
+                                </p>
+                            )}
+                        </div>
+
+                        {/* META DESCRIPTION */}
+                        <div>
+                            <label className="block mb-1 font-medium text-gray-700">
+                                Meta Description
+                            </label>
+
+                            <textarea
+                                rows={4}
+                                value={data.meta_description}
+                                onChange={(e) =>
+                                    setData("meta_description", e.target.value)
+                                }
+                                className="w-full border rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                placeholder="Enter meta description"
+                            />
+
+                            {errors.meta_description && (
+                                <p className="text-red-600 text-sm mt-1">
+                                    {errors.meta_description}
+                                </p>
+                            )}
+                        </div>
                     </div>
 
                     {/* ACTIVE */}

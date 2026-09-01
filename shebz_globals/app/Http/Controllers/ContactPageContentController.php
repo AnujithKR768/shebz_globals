@@ -52,6 +52,8 @@ class ContactPageContentController extends Controller
             'why_points.*' => 'nullable|string|max:255',
 
             'is_active' => 'required|boolean',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:255'
         ]);
 
         // ✅ Only ONE active record allowed
@@ -101,6 +103,9 @@ class ContactPageContentController extends Controller
             'why_points.*' => 'nullable|string|max:255',
 
             'is_active' => 'required|boolean',
+
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:255'
         ]);
 
         // ✅ Only ONE active record allowed

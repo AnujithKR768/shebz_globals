@@ -8,7 +8,7 @@ export default function FooterView() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 items-center gap-6">
 
-                    {/* ✅ LEFT */}
+                    {/* LEFT */}
                     <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3 text-center sm:text-left md:justify-self-start">
                         <img
                             src={assets.logo}
@@ -26,7 +26,7 @@ export default function FooterView() {
                         </div>
                     </div>
 
-                    {/* ✅ CENTER */}
+                    {/* CENTER */}
                     <div className="text-center text-xs sm:text-sm space-y-2 md:justify-self-center">
                         <div className="flex flex-col sm:flex-row justify-center gap-2 sm:gap-4">
                             <a
@@ -49,7 +49,7 @@ export default function FooterView() {
                         </p>
                     </div>
 
-                    {/* ✅ RIGHT (Icons moved little left) */}
+                    {/* RIGHT (Icons moved little left) */}
                     <div className="flex justify-center md:justify-self-end md:-translate-x-10 gap-5 text-xl">
                         <a
                             href="https://www.linkedin.com/company/shebz-global-safety-solutions/"

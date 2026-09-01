@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { router } from "@inertiajs/react";
+import { router, Head } from "@inertiajs/react";
 
 export default function QuoteRequest({ isOpen = true, onClose }) {
     const [form, setForm] = useState({
@@ -47,6 +47,10 @@ export default function QuoteRequest({ isOpen = true, onClose }) {
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
+
+            <Head>
+                <title>Request a Quote</title>
+            </Head>
 
             {/* BACKDROP */}
             {onClose && (

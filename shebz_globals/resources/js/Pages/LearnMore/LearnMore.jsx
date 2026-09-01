@@ -1,5 +1,6 @@
 import React from "react";
 import AppLayout from "../Layout/AppLayout";
+import { Head } from "@inertiajs/react";
 
 export default function LearnMore({ content }) {
     if (!content) {
@@ -12,6 +13,14 @@ export default function LearnMore({ content }) {
 
     return (
         <div className="w-full">
+
+            <Head>
+                <title>{content?.meta_title || "Learn More"}</title>
+                <meta
+                    name="description"
+                    content={content?.meta_description || ""}
+                />
+            </Head>
 
             {/* IMAGE */}
             {content?.top_image && (

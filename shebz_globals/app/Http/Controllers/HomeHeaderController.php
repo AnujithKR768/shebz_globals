@@ -32,27 +32,15 @@ class HomeHeaderController extends Controller
             'button_link' => 'nullable|string|max:255',
             'banner_text' => 'nullable|string|max:255',
             'is_active' => 'nullable|boolean',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string',
         ]);
 
-        // HOSTINGER-SAFE UPLOAD
         if ($request->hasFile('background_image')) {
-
-            $path = $request->file('background_image')->store('home_headers', 'public');
-
-            // FORCE public_html path
-            $destination = base_path('public_html/storage/' . $path);
-
-            if (!is_dir(dirname($destination))) {
-                mkdir(dirname($destination), 0755, true);
-            }
-
-            @copy(
-                storage_path('app/public/' . $path),
-                $destination
-            );
-
-            $data['background_image'] = $path;
+            $data['background_image'] = $request->file('background_image')->store('home_headers', 'public');
         }
+
+        $data['is_active'] = $request->boolean('is_active');
 
         HomeHeader::create($data);
 
@@ -61,7 +49,6 @@ class HomeHeaderController extends Controller
             ->with('success', 'Header created successfully!');
     }
 
-    // Edit
     public function edit(HomeHeader $homeHeader)
     {
         return Inertia::render('Home/HeaderEdit', [
@@ -69,7 +56,6 @@ class HomeHeaderController extends Controller
         ]);
     }
 
-    // UPDATE
     public function update(Request $request, HomeHeader $homeHeader)
     {
         $data = $request->validate([
@@ -81,40 +67,21 @@ class HomeHeaderController extends Controller
             'button_link' => 'nullable|string|max:255',
             'banner_text' => 'nullable|string|max:255',
             'is_active' => 'nullable|boolean',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string',
         ]);
+
+        $data['is_active'] = $request->boolean('is_active');
 
         if ($request->hasFile('background_image')) {
 
-            // delete Laravel file
-            if (
-                $homeHeader->background_image &&
-                Storage::disk('public')->exists($homeHeader->background_image)
-            ) {
+            if ($homeHeader->background_image &&
+                Storage::disk('public')->exists($homeHeader->background_image)) {
+
                 Storage::disk('public')->delete($homeHeader->background_image);
             }
 
-            // delete public_html file
-            $oldPublic = base_path('public_html/storage/' . $homeHeader->background_image);
-            if ($homeHeader->background_image && file_exists($oldPublic)) {
-                @unlink($oldPublic);
-            }
-
-            // store new
-            $path = $request->file('background_image')->store('home_headers', 'public');
-
-            // ⭐ FORCE public_html
-            $destination = base_path('public_html/storage/' . $path);
-
-            if (!is_dir(dirname($destination))) {
-                mkdir(dirname($destination), 0755, true);
-            }
-
-            @copy(
-                storage_path('app/public/' . $path),
-                $destination
-            );
-
-            $data['background_image'] = $path;
+            $data['background_image'] = $request->file('background_image')->store('home_headers', 'public');
 
         } else {
             unset($data['background_image']);
@@ -127,21 +94,12 @@ class HomeHeaderController extends Controller
             ->with('success', 'Header updated successfully!');
     }
 
-    // DELETE
     public function destroy(HomeHeader $homeHeader)
     {
-        // delete Laravel file
-        if (
-            $homeHeader->background_image &&
-            Storage::disk('public')->exists($homeHeader->background_image)
-        ) {
-            Storage::disk('public')->delete($homeHeader->background_image);
-        }
+        if ($homeHeader->background_image &&
+            Storage::disk('public')->exists($homeHeader->background_image)) {
 
-        // delete public_html file
-        $publicFile = base_path('public_html/storage/' . $homeHeader->background_image);
-        if ($homeHeader->background_image && file_exists($publicFile)) {
-            @unlink($publicFile);
+            Storage::disk('public')->delete($homeHeader->background_image);
         }
 
         $homeHeader->delete();

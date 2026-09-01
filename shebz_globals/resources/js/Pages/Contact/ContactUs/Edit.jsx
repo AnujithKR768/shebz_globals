@@ -27,6 +27,9 @@ export default function Edit({ content }) {
         why_points: content.why_points || [],
 
         is_active: content.is_active || false,
+
+        meta_title: content.meta_title || "",
+        meta_description: content.meta_description || "",
     });
 
     const submit = (e) => {
@@ -275,6 +278,46 @@ export default function Edit({ content }) {
                         ))}
                     </div>
 
+                    {/* SEO */}
+                    <div>
+                        <label className="block mb-1 font-medium text-gray-700">
+                            SEO
+                        </label>
+
+                        <input
+                            type="text"
+                            value={data.meta_title}
+                            onChange={(e) =>
+                                setData("meta_title", e.target.value)
+                            }
+                            className="w-full border rounded-md px-4 py-2"
+                            placeholder="Meta Title"
+                        />
+
+                        {errors.meta_title && (
+                            <p className="text-red-600 text-sm mt-1">
+                                {errors.meta_title}
+                            </p>
+                        )}
+                    </div>
+
+                    <div>
+                        <textarea
+                            rows={3}
+                            value={data.meta_description}
+                            onChange={(e) =>
+                                setData("meta_description", e.target.value)
+                            }
+                            className="w-full border rounded-md px-4 py-2"
+                            placeholder="Meta Description"
+                        />
+
+                        {errors.meta_description && (
+                            <p className="text-red-600 text-sm mt-1">
+                                {errors.meta_description}
+                            </p>
+                        )}
+                    </div>
                     {/* ACTIVE */}
                     <label className="flex items-center gap-2">
                         <input

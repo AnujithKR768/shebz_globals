@@ -19,7 +19,21 @@ export default function ServiceTable({ services }) {
 
     return (
         <AuthenticatedLayout header="Services">
-            <div className="bg-white rounded-lg border overflow-hidden">
+
+            <div className="bg-white rounded-lg shadow-md overflow-hidden">
+                {/* Header */}
+                <div className="flex items-center justify-between p-6 border-b">
+                    <h2 className="text-2xl font-bold text-gray-800">
+                        Service List
+                    </h2>
+
+                    <Link
+                        href="/services/create"
+                        className="bg-[#0025cc] hover:bg-blue-800 text-white px-5 py-2 rounded-md font-medium"
+                    >
+                        + Add Service
+                    </Link>
+                </div>
 
                 {/* TABLE WRAPPER */}
                 <div className="overflow-x-auto">
@@ -29,6 +43,7 @@ export default function ServiceTable({ services }) {
                                 <th className="px-4 py-3 text-left">S.No</th>
                                 <th className="px-4 py-3 text-left">Icon</th>
                                 <th className="px-4 py-3 text-left">Title</th>
+                                <th className="px-4 py-3 text-left">Category</th>
                                 <th className="px-4 py-3 text-left">Description</th>
                                 <th className="px-4 py-3 text-center">Edit</th>
                                 <th className="px-4 py-3 text-center">Delete</th>
@@ -71,6 +86,31 @@ export default function ServiceTable({ services }) {
                                             {service.title || "—"}
                                         </td>
 
+                                        {/* CATEGORY */}
+                                        <td className="px-4 py-3">
+                                            {service.category ? (
+                                                <span
+                                                    className="
+                                                        inline-block
+                                                        px-3
+                                                        py-1
+                                                        rounded-full
+                                                        bg-blue-100
+                                                        text-blue-700
+                                                        text-xs
+                                                        font-semibold
+                                                        whitespace-nowrap
+                                                    "
+                                                >
+                                                    {service.category}
+                                                </span>
+                                            ) : (
+                                                <span className="text-gray-400 text-xs">
+                                                    Not Set
+                                                </span>
+                                            )}
+                                        </td>
+
                                         {/* DESCRIPTION */}
                                         <td className="px-4 py-3 text-gray-600 max-w-xs">
                                             <div className="line-clamp-3">
@@ -85,8 +125,19 @@ export default function ServiceTable({ services }) {
                                         {/* EDIT */}
                                         <td className="px-4 py-3 text-center">
                                             <Link
-                                                href={route("service.edit", service.id)}
-                                                className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
+                                                href={route(
+                                                    "service.edit",
+                                                    service.id
+                                                )}
+                                                className="
+                                                    bg-green-600
+                                                    hover:bg-green-700
+                                                    text-white
+                                                    px-3
+                                                    py-1
+                                                    rounded
+                                                    text-sm
+                                                "
                                             >
                                                 Edit
                                             </Link>
@@ -96,8 +147,19 @@ export default function ServiceTable({ services }) {
                                         <td className="px-4 py-3 text-center">
                                             <button
                                                 disabled={processing}
-                                                onClick={() => handleDelete(service.id)}
-                                                className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm disabled:opacity-50"
+                                                onClick={() =>
+                                                    handleDelete(service.id)
+                                                }
+                                                className="
+                                                    bg-red-600
+                                                    hover:bg-red-700
+                                                    text-white
+                                                    px-3
+                                                    py-1
+                                                    rounded
+                                                    text-sm
+                                                    disabled:opacity-50
+                                                "
                                             >
                                                 Delete
                                             </button>
@@ -107,7 +169,7 @@ export default function ServiceTable({ services }) {
                             ) : (
                                 <tr>
                                     <td
-                                        colSpan="6"
+                                        colSpan="7"
                                         className="text-center py-8 text-gray-500"
                                     >
                                         No services found.

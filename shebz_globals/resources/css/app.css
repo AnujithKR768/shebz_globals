@@ -2,4 +2,82 @@
 @tailwind components;
 @tailwind utilities;
 
+/* =========================================================
+   BLOG EDITOR
+   ========================================================= */
 
+.blog-editor .ql-toolbar {
+    border: 1px solid #d1d5db;
+    border-radius: 8px 8px 0 0;
+    background: #ffffff;
+}
+
+.blog-editor .ql-container {
+    border: 1px solid #d1d5db;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+
+    height: 500px;
+    font-size: 16px;
+}
+
+.blog-editor .ql-editor {
+    min-height: 500px;
+    height: 500px;
+
+    padding: 20px;
+
+    font-size: 16px;
+    line-height: 1.8;
+
+    overflow-y: auto;
+}
+
+/* Paragraph spacing */
+.blog-editor .ql-editor p {
+    margin-bottom: 1rem;
+}
+
+/* Headings */
+.blog-editor .ql-editor h1 {
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.blog-editor .ql-editor h2 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.blog-editor .ql-editor h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-top: 1.25rem;
+    margin-bottom: 0.75rem;
+}
+
+.blog-editor .ql-editor h4 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Images inside editor */
+.blog-editor .ql-editor img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 20px auto;
+    border-radius: 8px;
+}
+
+/* Links */
+.blog-editor .ql-editor a {
+    color: #0025cc;
+    text-decoration: underline;
+}

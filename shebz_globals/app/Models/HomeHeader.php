@@ -18,5 +18,7 @@ class HomeHeader extends Model
         'button_link',
         'banner_text',
         'is_active',
+        'meta_title',
+        'meta_description',
     ];
 }

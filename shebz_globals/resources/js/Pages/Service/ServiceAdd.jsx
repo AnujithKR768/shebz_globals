@@ -1,6 +1,7 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
 import { useRef, useState } from "react";
+import { BiCategory } from "react-icons/bi";
 
 export default function ServiceAdd() {
     const fileInput = useRef(null);
@@ -9,7 +10,10 @@ export default function ServiceAdd() {
     const { data, setData, post, processing, reset, errors } = useForm({
         icon: null,
         title: "",
+        Category: "",
         description: "",
+        meta_title: "",
+        meta_description: "",
     });
 
     /* =====================================================
@@ -125,6 +129,33 @@ export default function ServiceAdd() {
                         )}
                     </div>
 
+                    {/* CATEGORY */}
+                    <div>
+                        <label className="block text-sm font-medium mb-1">
+                            Service Category
+                        </label>
+
+                        <select
+                            value={data.category}
+                            onChange={(e) =>
+                                setData("category", e.target.value)
+                            }
+                            className="border p-2 w-full rounded focus:ring-2 focus:ring-blue-500"
+                        >
+                            <option value="">Select Category</option>
+                            <option value="Website">Website</option>
+                            <option value="SEO">SEO</option>
+                            <option value="Consultation">Consultation</option>
+                            <option value="Socialmedia">Social Media</option>
+                        </select>
+
+                        {errors.category && (
+                            <p className="text-red-600 text-sm mt-1">
+                                {errors.category}
+                            </p>
+                        )}
+                    </div>
+
                     {/* DESCRIPTION */}
                     <div>
                         <label className="block text-sm font-medium mb-1">
@@ -144,6 +175,50 @@ export default function ServiceAdd() {
                         {errors.description && (
                             <p className="text-red-600 text-sm mt-1">
                                 {errors.description}
+                            </p>
+                        )}
+                    </div>
+
+                    {/* META  */}
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium mb-1">
+                            Meta Title
+                        </label>
+
+                        <input
+                            type="text"
+                            className="border p-2 w-full rounded"
+                            value={data.meta_title}
+                            onChange={(e) =>
+                                setData("meta_title", e.target.value)
+                            }
+                            placeholder="Enter meta title"
+                        />
+
+                        {errors.meta_title && (
+                            <p className="text-red-600 text-sm mt-1">
+                                {errors.meta_title}
+                            </p>
+                        )}
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium mb-1">
+                            Meta Description
+                        </label>
+
+                        <textarea
+                            rows="3"
+                            className="border p-2 w-full rounded text-justify"
+                            value={data.meta_description}
+                            onChange={(e) =>
+                                setData("meta_description", e.target.value)
+                            }
+                            placeholder="Enter meta description"
+                        />
+
+                        {errors.meta_description && (
+                            <p className="text-red-600 text-sm mt-1">
+                                {errors.meta_description}
                             </p>
                         )}
                     </div>

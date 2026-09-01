@@ -183,6 +183,47 @@ export default function Create({ auth }) {
                         <option value="0">Inactive</option>
                     </select>
 
+                    {/* SEO */}
+                    <div>
+                        <label className="block font-semibold text-gray-700 mb-1">
+                            SEO
+                        </label>
+
+                        <input
+                            type="text"
+                            value={data.meta_title}
+                            onChange={(e) =>
+                                setData("meta_title", e.target.value)
+                            }
+                            className="w-full border rounded-md px-4 py-2"
+                            placeholder="Meta Title"
+                        />
+
+                        {errors.meta_title && (
+                            <p className="text-red-600 text-sm mt-1">
+                                {errors.meta_title}
+                            </p>
+                        )}
+                    </div>
+
+                    <div>
+                        <textarea
+                            rows="3"
+                            value={data.meta_description}
+                            onChange={(e) =>
+                                setData("meta_description", e.target.value)
+                            }
+                            className="w-full border rounded-md px-4 py-2"
+                            placeholder="Meta Description"
+                        />
+
+                        {errors.meta_description && (
+                            <p className="text-red-600 text-sm mt-1">
+                                {errors.meta_description}
+                            </p>
+                        )}
+                    </div>
+
                     <div className="flex justify-between pt-4">
                         <Link href={route("learnmore.admin.index")}>
                             ← Back

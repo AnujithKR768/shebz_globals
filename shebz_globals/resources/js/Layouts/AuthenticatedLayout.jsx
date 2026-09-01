@@ -1,52 +1,93 @@
 import { Link, usePage } from "@inertiajs/react";
 import { useState, useEffect } from "react";
 
-export default function AuthenticatedLayout({ user, header, children }) {
-    const { url } = usePage();
+export default function AuthenticatedLayout({ header, children }) {
+    const { url, props } = usePage();
 
-    // Permissions array
+    // =========================================================
+    // AUTHENTICATED USER
+    // =========================================================
+    // User is shared globally from HandleInertiaRequests.php
+    const user = props.auth?.user;
+
+    // Permissions
     const permissions = user?.permissions || [];
+
+    // Admin check
     const isAdmin = user?.role === "admin";
 
-    // Page permissions
-    const canHome = isAdmin || permissions.includes("home");
-    const canAbout = isAdmin || permissions.includes("about");
-    const canServices = isAdmin || permissions.includes("services");
-    const canSolutions = isAdmin || permissions.includes("solutions");
-    const canContact = isAdmin || permissions.includes("contact");
-    const canVision = isAdmin || permissions.includes("vision_mission");
-    const canTestimonials = isAdmin || permissions.includes("testimonials");
+    // =========================================================
+    // PAGE PERMISSIONS
+    // =========================================================
+    const canHome =
+        isAdmin || permissions.includes("home");
 
+    const canAbout =
+        isAdmin || permissions.includes("about");
 
-    // Request permissions
-    const canContactList = isAdmin || permissions.includes("contact_list");
-    const canQuoteRequests = isAdmin || permissions.includes("quote_requests");
+    const canServices =
+        isAdmin || permissions.includes("services");
 
-    // Users permission
-    const canManageUsers = isAdmin || permissions.includes("users");
+    const canSolutions =
+        isAdmin || permissions.includes("solutions");
 
-    // dropdown states
+    const canContact =
+        isAdmin || permissions.includes("contact");
+
+    const canBlog =
+        isAdmin || permissions.includes("blog");
+
+    const canVision =
+        isAdmin || permissions.includes("vision_mission");
+
+    const canTestimonials =
+        isAdmin || permissions.includes("testimonials");
+
+    // =========================================================
+    // REQUEST PERMISSIONS
+    // =========================================================
+    const canContactList =
+        isAdmin || permissions.includes("contact_list");
+
+    const canQuoteRequests =
+        isAdmin || permissions.includes("quote_requests");
+
+    // =========================================================
+    // USERS PERMISSION
+    // =========================================================
+    const canManageUsers =
+        isAdmin || permissions.includes("users");
+
+    // =========================================================
+    // DROPDOWN STATES
+    // =========================================================
     const [openHome, setOpenHome] = useState(false);
-    const [openServices, setOpenServices] = useState(false);
-    const [openVM, setOpenVM] = useState(false);
     const [openAbout, setOpenAbout] = useState(false);
+    const [openVM, setOpenVM] = useState(false);
     const [openSolutions, setOpenSolutions] = useState(false);
 
-    // auto open correct menu based on URL
+    // =========================================================
+    // AUTO OPEN MENU BASED ON CURRENT URL
+    // =========================================================
     useEffect(() => {
-        if (url.startsWith("/home-header") || url.startsWith("/learnmore-list")) {
+        if (
+            url.startsWith("/home-header") ||
+            url.startsWith("/learnmore-list")
+        ) {
             setOpenHome(true);
         }
 
-        if (url.startsWith("/about-story") || url.startsWith("/core-values")) {
+        if (
+            url.startsWith("/about-story") ||
+            url.startsWith("/core-values")
+        ) {
             setOpenAbout(true);
         }
 
-        if (url.startsWith("/service") || url.startsWith("/services")) {
-            setOpenServices(true);
-        }
-
-        if (url.startsWith("/mission-vision") || url.startsWith("/founder-message")) {
+        if (
+            url.startsWith("/mission-vision") ||
+            url.startsWith("/founder-message")
+        ) {
             setOpenVM(true);
         }
 
@@ -62,40 +103,69 @@ export default function AuthenticatedLayout({ user, header, children }) {
         }
     }, [url]);
 
-    const activeClass = "bg-[#0025cc] text-white";
-    const normalClass = "text-gray-700 hover:bg-[#0025cc] hover:text-white";
+    // =========================================================
+    // ACTIVE / NORMAL CLASSES
+    // =========================================================
+    const activeClass =
+        "bg-[#0025cc] text-white";
 
+    const normalClass =
+        "text-gray-700 hover:bg-[#0025cc] hover:text-white";
+
+    // =========================================================
+    // LAYOUT
+    // =========================================================
     return (
-
         <div className="min-h-screen flex bg-gray-100">
-            {/* ================= SIDEBAR ================= */}
+
+            {/* =================================================
+                SIDEBAR
+            ================================================= */}
             <aside className="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col">
-                {/* LOGO */}
+
+                {/* =================================================
+                    LOGO
+                ================================================= */}
                 <div className="h-16 flex items-center px-6 border-b">
-                    <Link href="/dashboard" className="flex items-center gap-2">
+                    <Link
+                        href="/dashboard"
+                        className="flex items-center gap-2"
+                    >
                         <img
                             src="/favicon.png"
                             alt="Shebz Globals"
                             className="h-8 w-8"
                         />
+
                         <span className="text-lg font-semibold text-gray-800">
                             Shebz Globals
                         </span>
                     </Link>
                 </div>
 
-                {/* NAVIGATION */}
-                <nav className="flex-1 px-4 py-6 space-y-1">
-                    {/* Dashboard (always visible) */}
+                {/* =================================================
+                    NAVIGATION
+                ================================================= */}
+                <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+
+                    {/* =================================================
+                        DASHBOARD
+                    ================================================= */}
                     <Link
                         href="/dashboard"
                         className={`block px-3 py-2 rounded-md font-medium
-                            ${url === "/dashboard" ? activeClass : normalClass}`}
+                            ${
+                                url === "/dashboard"
+                                    ? activeClass
+                                    : normalClass
+                            }`}
                     >
                         Dashboard
                     </Link>
 
-                    {/* Quote Requests */}
+                    {/* =================================================
+                        QUOTE REQUESTS
+                    ================================================= */}
                     {canQuoteRequests && (
                         <Link
                             href="/quote-requests"
@@ -110,7 +180,9 @@ export default function AuthenticatedLayout({ user, header, children }) {
                         </Link>
                     )}
 
-                    {/* Contact List */}
+                    {/* =================================================
+                        CONTACT LIST
+                    ================================================= */}
                     {canContactList && (
                         <Link
                             href="/contact-list"
@@ -125,7 +197,9 @@ export default function AuthenticatedLayout({ user, header, children }) {
                         </Link>
                     )}
 
-                    {/* Testimolials */}
+                    {/* =================================================
+                        TESTIMONIALS
+                    ================================================= */}
                     {canTestimonials && (
                         <Link
                             href="/testimonials-list"
@@ -140,23 +214,33 @@ export default function AuthenticatedLayout({ user, header, children }) {
                         </Link>
                     )}
 
-
-                    {/* Users */}
+                    {/* =================================================
+                        USERS
+                    ================================================= */}
                     {canManageUsers && (
                         <Link
                             href="/users"
                             className={`block px-3 py-2 rounded-md font-medium
-                                ${url.startsWith("/users") ? activeClass : normalClass}`}
+                                ${
+                                    url.startsWith("/users")
+                                        ? activeClass
+                                        : normalClass
+                                }`}
                         >
                             Users
                         </Link>
                     )}
 
-                    {/* ================= HOME MENU ================= */}
+                    {/* =================================================
+                        HOME
+                    ================================================= */}
                     {canHome && (
                         <>
                             <button
-                                onClick={() => setOpenHome(!openHome)}
+                                type="button"
+                                onClick={() =>
+                                    setOpenHome(!openHome)
+                                }
                                 className={`w-full flex justify-between items-center px-3 py-2 rounded-md font-medium
                                     ${
                                         url.startsWith("/home-header") ||
@@ -166,11 +250,16 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                     }`}
                             >
                                 <span>Home</span>
-                                <span className="text-sm">{openHome ? "▾" : "▸"}</span>
+
+                                <span className="text-sm">
+                                    {openHome ? "▾" : "▸"}
+                                </span>
                             </button>
 
                             {openHome && (
                                 <div className="ml-4 mt-1 space-y-1">
+
+                                    {/* Home Header */}
                                     <Link
                                         href="/home-header"
                                         className={`block px-3 py-2 rounded-md text-sm
@@ -183,6 +272,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                         Header
                                     </Link>
 
+                                    {/* Learn More */}
                                     <Link
                                         href="/learnmore-list"
                                         className={`block px-3 py-2 rounded-md text-sm
@@ -199,11 +289,16 @@ export default function AuthenticatedLayout({ user, header, children }) {
                         </>
                     )}
 
-                    {/* ================= ABOUT US MENU ================= */}
+                    {/* =================================================
+                        ABOUT US
+                    ================================================= */}
                     {canAbout && (
                         <>
                             <button
-                                onClick={() => setOpenAbout(!openAbout)}
+                                type="button"
+                                onClick={() =>
+                                    setOpenAbout(!openAbout)
+                                }
                                 className={`w-full flex justify-between items-center px-3 py-2 rounded-md font-medium
                                     ${
                                         url.startsWith("/about-story") ||
@@ -213,16 +308,25 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                     }`}
                             >
                                 <span>About Us</span>
-                                <span className="text-sm">{openAbout ? "▾" : "▸"}</span>
+
+                                <span className="text-sm">
+                                    {openAbout ? "▾" : "▸"}
+                                </span>
                             </button>
 
                             {openAbout && (
                                 <div className="ml-4 mt-1 space-y-1">
+
+                                    {/* About Story */}
                                     <Link
-                                        href={route("aboutstory.admin.index")}
+                                        href={route(
+                                            "aboutstory.admin.index"
+                                        )}
                                         className={`block px-3 py-2 rounded-md text-sm
                                             ${
-                                                route().current("aboutstory.admin.*")
+                                                route().current(
+                                                    "aboutstory.admin.*"
+                                                )
                                                     ? activeClass
                                                     : "text-gray-600 hover:bg-gray-100"
                                             }`}
@@ -230,11 +334,16 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                         About Story
                                     </Link>
 
+                                    {/* Core Values */}
                                     <Link
-                                        href={route("corevalue.admin.index")}
+                                        href={route(
+                                            "corevalue.admin.index"
+                                        )}
                                         className={`block px-3 py-2 rounded-md text-sm
                                             ${
-                                                route().current("corevalue.admin.*")
+                                                route().current(
+                                                    "corevalue.admin.*"
+                                                )
                                                     ? activeClass
                                                     : "text-gray-600 hover:bg-gray-100"
                                             }`}
@@ -246,57 +355,33 @@ export default function AuthenticatedLayout({ user, header, children }) {
                         </>
                     )}
 
-                    {/* ================= SERVICES MENU ================= */}
+                    {/* =================================================
+                        SERVICES
+                    ================================================= */}
                     {canServices && (
-                        <>
-                            <button
-                                onClick={() => setOpenServices(!openServices)}
-                                className={`w-full flex justify-between items-center px-3 py-2 rounded-md font-medium
-                                    ${
-                                        url.startsWith("/service") || url.startsWith("/services")
-                                            ? activeClass
-                                            : "text-gray-700 hover:bg-gray-100"
-                                    }`}
-                            >
-                                <span>Services</span>
-                                <span className="text-sm">{openServices ? "▾" : "▸"}</span>
-                            </button>
-
-                            {openServices && (
-                                <div className="ml-4 mt-1 space-y-1">
-                                    <Link
-                                        href="/services/create"
-                                        className={`block px-3 py-2 rounded-md text-sm
-                                            ${
-                                                url === "/services/create"
-                                                    ? activeClass
-                                                    : "text-gray-600 hover:bg-gray-100"
-                                            }`}
-                                    >
-                                        Add Service
-                                    </Link>
-
-                                    <Link
-                                        href="/service"
-                                        className={`block px-3 py-2 rounded-md text-sm
-                                            ${
-                                                url === "/service"
-                                                    ? activeClass
-                                                    : "text-gray-600 hover:bg-gray-100"
-                                            }`}
-                                    >
-                                        Service List
-                                    </Link>
-                                </div>
-                            )}
-                        </>
+                        <Link
+                            href="/service"
+                            className={`block px-3 py-2 rounded-md font-medium
+                                ${
+                                    url.startsWith("/service")
+                                        ? activeClass
+                                        : normalClass
+                                }`}
+                        >
+                            Services
+                        </Link>
                     )}
 
-                    {/* ================= SOLUTIONS MENU ================= */}
+                    {/* =================================================
+                        SOLUTIONS
+                    ================================================= */}
                     {canSolutions && (
                         <>
                             <button
-                                onClick={() => setOpenSolutions(!openSolutions)}
+                                type="button"
+                                onClick={() =>
+                                    setOpenSolutions(!openSolutions)
+                                }
                                 className={`w-full flex justify-between items-center px-3 py-2 rounded-md font-medium
                                     ${
                                         url.startsWith("/solutions-admin") ||
@@ -310,77 +395,111 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                     }`}
                             >
                                 <span>Solutions</span>
-                                <span className="text-sm">{openSolutions ? "▾" : "▸"}</span>
+
+                                <span className="text-sm">
+                                    {openSolutions ? "▾" : "▸"}
+                                </span>
                             </button>
 
                             {openSolutions && (
                                 <div className="ml-4 mt-1 space-y-1">
+
+                                    {/* Our Solutions */}
                                     <Link
-                                        href={route("solutions.admin.index")}
+                                        href={route(
+                                            "solutions.admin.index"
+                                        )}
                                         className={`block px-3 py-2 rounded-md text-sm
                                             ${
-                                                route().current("solutions.admin.*")
-                                                    ? "bg-[#0025cc] text-white"
+                                                route().current(
+                                                    "solutions.admin.*"
+                                                )
+                                                    ? activeClass
                                                     : "text-gray-600 hover:bg-gray-100"
                                             }`}
                                     >
                                         Our Solutions
                                     </Link>
 
+                                    {/* Case Studies */}
                                     <Link
-                                        href={route("casestudy.admin.index")}
+                                        href={route(
+                                            "casestudy.admin.index"
+                                        )}
                                         className={`block px-3 py-2 rounded-md text-sm
                                             ${
-                                                route().current("casestudy.admin.*")
-                                                    ? "bg-[#0025cc] text-white"
+                                                route().current(
+                                                    "casestudy.admin.*"
+                                                )
+                                                    ? activeClass
                                                     : "text-gray-600 hover:bg-gray-100"
                                             }`}
                                     >
                                         Case Studies
                                     </Link>
 
+                                    {/* Knowledge Hub */}
                                     <Link
-                                        href={route("knowledgehub.admin.index")}
+                                        href={route(
+                                            "knowledgehub.admin.index"
+                                        )}
                                         className={`block px-3 py-2 rounded-md text-sm
                                             ${
-                                                route().current("knowledgehub.admin.*")
-                                                    ? "bg-[#0025cc] text-white"
+                                                route().current(
+                                                    "knowledgehub.admin.*"
+                                                )
+                                                    ? activeClass
                                                     : "text-gray-600 hover:bg-gray-100"
                                             }`}
                                     >
                                         Knowledge Hub
                                     </Link>
 
+                                    {/* Knowledge Hub Items */}
                                     <Link
-                                        href={route("knowledgehubitem.admin.index")}
+                                        href={route(
+                                            "knowledgehubitem.admin.index"
+                                        )}
                                         className={`block px-3 py-2 rounded-md text-sm
                                             ${
-                                                route().current("knowledgehubitem.admin.*")
-                                                    ? "bg-[#0025cc] text-white"
+                                                route().current(
+                                                    "knowledgehubitem.admin.*"
+                                                )
+                                                    ? activeClass
                                                     : "text-gray-600 hover:bg-gray-100"
                                             }`}
                                     >
                                         Knowledge Hub Items
                                     </Link>
 
+                                    {/* Coaching & Mentorship */}
                                     <Link
-                                        href={route("coaching.admin.index")}
+                                        href={route(
+                                            "coaching.admin.index"
+                                        )}
                                         className={`block px-3 py-2 rounded-md text-sm
                                             ${
-                                                route().current("coaching.admin.*")
-                                                    ? "bg-[#0025cc] text-white"
+                                                route().current(
+                                                    "coaching.admin.*"
+                                                )
+                                                    ? activeClass
                                                     : "text-gray-600 hover:bg-gray-100"
                                             }`}
                                     >
                                         Coaching & Mentorship
                                     </Link>
 
+                                    {/* Coaching Programs */}
                                     <Link
-                                        href={route("coachingprogram.admin.index")}
+                                        href={route(
+                                            "coachingprogram.admin.index"
+                                        )}
                                         className={`block px-3 py-2 rounded-md text-sm
                                             ${
-                                                route().current("coachingprogram.admin.*")
-                                                    ? "bg-[#0025cc] text-white"
+                                                route().current(
+                                                    "coachingprogram.admin.*"
+                                                )
+                                                    ? activeClass
                                                     : "text-gray-600 hover:bg-gray-100"
                                             }`}
                                     >
@@ -391,22 +510,33 @@ export default function AuthenticatedLayout({ user, header, children }) {
                         </>
                     )}
 
-                    {/* ================= CONTACT US ================= */}
+                    {/* =================================================
+                        CONTACT US
+                    ================================================= */}
                     {canContact && (
                         <Link
                             href={route("contact-content.index")}
                             className={`block px-3 py-2 rounded-md font-medium
-                                ${url.startsWith("/contact-content") ? activeClass : normalClass}`}
+                                ${
+                                    url.startsWith("/contact-content")
+                                        ? activeClass
+                                        : normalClass
+                                }`}
                         >
                             Contact Us
                         </Link>
                     )}
 
-                    {/* ================= VISION / MISSION / MESSAGE ================= */}
+                    {/* =================================================
+                        VISION / MISSION / FOUNDER MESSAGE
+                    ================================================= */}
                     {canVision && (
                         <>
                             <button
-                                onClick={() => setOpenVM(!openVM)}
+                                type="button"
+                                onClick={() =>
+                                    setOpenVM(!openVM)
+                                }
                                 className={`w-full flex justify-between items-center px-3 py-2 rounded-md font-medium
                                     ${
                                         url.startsWith("/mission-vision") ||
@@ -415,17 +545,28 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                             : "text-gray-700 hover:bg-gray-100"
                                     }`}
                             >
-                                <span>Vision / Mission / Message</span>
-                                <span className="text-sm">{openVM ? "▾" : "▸"}</span>
+                                <span>
+                                    Vision / Mission / Message
+                                </span>
+
+                                <span className="text-sm">
+                                    {openVM ? "▾" : "▸"}
+                                </span>
                             </button>
 
                             {openVM && (
                                 <div className="ml-4 mt-1 space-y-1">
+
+                                    {/* Mission & Vision */}
                                     <Link
-                                        href={route("missionvision.index")}
+                                        href={route(
+                                            "missionvision.index"
+                                        )}
                                         className={`block px-3 py-2 rounded-md text-sm
                                             ${
-                                                url.startsWith("/mission-vision")
+                                                url.startsWith(
+                                                    "/mission-vision"
+                                                )
                                                     ? activeClass
                                                     : "text-gray-600 hover:bg-gray-100"
                                             }`}
@@ -433,11 +574,16 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                         Mission & Vision
                                     </Link>
 
+                                    {/* Founder Message */}
                                     <Link
-                                        href={route("founder.admin.index")}
+                                        href={route(
+                                            "founder.admin.index"
+                                        )}
                                         className={`block px-3 py-2 rounded-md text-sm
                                             ${
-                                                url.startsWith("/founder-message")
+                                                url.startsWith(
+                                                    "/founder-message"
+                                                )
                                                     ? activeClass
                                                     : "text-gray-600 hover:bg-gray-100"
                                             }`}
@@ -448,18 +594,48 @@ export default function AuthenticatedLayout({ user, header, children }) {
                             )}
                         </>
                     )}
+
+                    {/* =================================================
+                        BLOG
+                    ================================================= */}
+                    {canBlog && (
+                        <Link
+                            href={route("blog.index")}
+                            className={`block px-3 py-2 rounded-md font-medium
+                                ${
+                                    url.startsWith("/blog")
+                                        ? activeClass
+                                        : normalClass
+                                }`}
+                        >
+                            Blog
+                        </Link>
+                    )}
                 </nav>
             </aside>
 
-            {/* ================= MAIN AREA ================= */}
+            {/* =================================================
+                MAIN AREA
+            ================================================= */}
             <div className="flex-1 flex flex-col">
-                {/* TOP BAR */}
+
+                {/* =================================================
+                    TOP BAR
+                ================================================= */}
                 <header className="h-16 bg-white border-b flex items-center justify-between px-6">
-                    <h2 className="text-xl font-semibold text-gray-800">{header}</h2>
+
+                    <h2 className="text-xl font-semibold text-gray-800">
+                        {header}
+                    </h2>
 
                     <div className="flex items-center gap-4">
-                        <span className="text-sm text-gray-700">{user?.name}</span>
 
+                        {/* User Name */}
+                        <span className="text-sm text-gray-700">
+                            {user?.name}
+                        </span>
+
+                        {/* Logout */}
                         <Link
                             href="/logout"
                             method="post"
@@ -471,10 +647,13 @@ export default function AuthenticatedLayout({ user, header, children }) {
                     </div>
                 </header>
 
-                {/* PAGE CONTENT */}
-                <main className="flex-1 p-6">{children}</main>
+                {/* =================================================
+                    PAGE CONTENT
+                ================================================= */}
+                <main className="flex-1 p-6">
+                    {children}
+                </main>
             </div>
         </div>
-
     );
 }

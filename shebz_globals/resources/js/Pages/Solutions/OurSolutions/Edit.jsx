@@ -11,6 +11,8 @@ export default function Edit({ auth, item }) {
         description: item?.description || "",
         image: null,
         is_active: item?.is_active ? true : false,
+        meta_title: item?.meta_title || "",
+        meta_description: item?.meta_description || "",
         _method: "put",
     });
 
@@ -152,6 +154,33 @@ export default function Edit({ auth, item }) {
                             <option value="1">Active</option>
                             <option value="0">Inactive</option>
                         </select>
+                    </div>
+
+                    {/* META */}
+
+                    <div>
+                        <label className="block font-semibold text-gray-700 mb-1">
+                            SEO
+                        </label>
+                        <input
+                            value={data.meta_title}
+                            onChange={(e) =>
+                                setData("meta_title", e.target.value)
+                            }
+                            placeholder="Meta Title"
+                            className="w-full border rounded-md px-4 py-2 mb-2"
+                        />
+                    </div>
+                    <div>
+                        <textarea
+                            rows="3"
+                            value={data.meta_description}
+                            onChange={(e) =>
+                                setData("meta_description", e.target.value)
+                            }
+                            placeholder="Meta Description"
+                            className="w-full border rounded-md px-4 py-2"
+                        />
                     </div>
 
                     {/* ACTIONS */}

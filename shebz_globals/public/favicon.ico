@@ -1,5 +1,0 @@
-import ApplicationLogo from "@/Components/ApplicationLogo";
-
-export default function favicon(){
-    return (<ApplicationLogo />);
-}

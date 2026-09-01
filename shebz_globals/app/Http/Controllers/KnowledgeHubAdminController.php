@@ -28,32 +28,18 @@ class KnowledgeHubAdminController extends Controller
             "title" => "required|string|max:255",
             "subtitle" => "nullable|string|max:255",
             "box_title" => "nullable|string|max:255",
-            "image" => "nullable|image|mimes:png,jpg,jpeg,svg|max:40960",
+            "image" => 'nullable|image|mimes:png,jpg,jpeg,svg,webp|max:40960',
             "is_active" => "nullable|boolean",
         ]);
 
-        // ✅ HOSTINGER-SAFE UPLOAD
         if ($request->hasFile("image")) {
-
-            $path = $request->file("image")->store("knowledgehub", "public");
-
-            // ⭐ FORCE public_html path
-            $destination = base_path("public_html/storage/" . $path);
-
-            if (!is_dir(dirname($destination))) {
-                mkdir(dirname($destination), 0755, true);
-            }
-
-            @copy(
-                storage_path("app/public/" . $path),
-                $destination
-            );
-
-            $data["image"] = $path;
+            $data["image"] = $request->file("image")->store("knowledgehub", "public");
         }
 
+        $data["is_active"] = $request->boolean("is_active");
+
         // only one active
-        if (!empty($data["is_active"])) {
+        if ($data["is_active"]) {
             KnowledgeHub::where("is_active", true)
                 ->update(["is_active" => false]);
         }
@@ -78,13 +64,14 @@ class KnowledgeHubAdminController extends Controller
             "title" => "required|string|max:255",
             "subtitle" => "nullable|string|max:255",
             "box_title" => "nullable|string|max:255",
-            "image" => "nullable|image|mimes:png,jpg,jpeg,svg|max:40960",
+            "image" => 'nullable|image|mimes:png,jpg,jpeg,svg,webp|max:40960',
             "is_active" => "nullable|boolean",
         ]);
 
+        $data["is_active"] = $request->boolean("is_active");
+
         if ($request->hasFile("image")) {
 
-            // delete Laravel file
             if (
                 $knowledgeHub->image &&
                 Storage::disk("public")->exists($knowledgeHub->image)
@@ -92,35 +79,14 @@ class KnowledgeHubAdminController extends Controller
                 Storage::disk("public")->delete($knowledgeHub->image);
             }
 
-            // delete public_html file
-            $oldPublic = base_path("public_html/storage/" . $knowledgeHub->image);
-            if ($knowledgeHub->image && file_exists($oldPublic)) {
-                @unlink($oldPublic);
-            }
-
-            // store new
-            $path = $request->file("image")->store("knowledgehub", "public");
-
-            // ⭐ FORCE public_html
-            $destination = base_path("public_html/storage/" . $path);
-
-            if (!is_dir(dirname($destination))) {
-                mkdir(dirname($destination), 0755, true);
-            }
-
-            @copy(
-                storage_path("app/public/" . $path),
-                $destination
-            );
-
-            $data["image"] = $path;
+            $data["image"] = $request->file("image")->store("knowledgehub", "public");
 
         } else {
             unset($data["image"]);
         }
 
         // only one active record
-        if (!empty($data["is_active"])) {
+        if ($data["is_active"]) {
             KnowledgeHub::where("id", "!=", $knowledgeHub->id)
                 ->update(["is_active" => false]);
         }
@@ -134,18 +100,11 @@ class KnowledgeHubAdminController extends Controller
 
     public function destroy(KnowledgeHub $knowledgeHub)
     {
-        // delete Laravel file
         if (
             $knowledgeHub->image &&
             Storage::disk("public")->exists($knowledgeHub->image)
         ) {
             Storage::disk("public")->delete($knowledgeHub->image);
-        }
-
-        // delete public_html file
-        $publicFile = base_path("public_html/storage/" . $knowledgeHub->image);
-        if ($knowledgeHub->image && file_exists($publicFile)) {
-            @unlink($publicFile);
         }
 
         $knowledgeHub->delete();

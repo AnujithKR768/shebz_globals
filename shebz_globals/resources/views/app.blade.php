@@ -4,8 +4,19 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
+         <!-- CSRF Token -->
+        <meta
+            name="csrf-token"
+            content="{{ csrf_token() }}"
+        >
+
+        <!-- Fallback title only -->
         <title inertia>{{ config('app.name', 'Shebz Global') }}</title>
 
+        <!-- Site name signal -->
+        <meta property="og:site_name" content="Shebz Global" />
+
+        <!-- Favicon -->
         <link rel="icon" type="image/png" href="/favicon.png">
         <link rel="shortcut icon" href="/favicon.ico">
 
@@ -16,7 +27,9 @@
         <!-- Scripts -->
         @routes
         @viteReactRefresh
-        @vite(['resources/js/app.jsx', "resources/js/Pages/{$page['component']}.jsx"])
+        @vite([
+            'resources/js/app.jsx',
+            "resources/js/Pages/{$page['component']}.jsx"])
         @inertiaHead
     </head>
     <body class="font-sans antialiased">

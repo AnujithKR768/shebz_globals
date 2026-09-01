@@ -10,7 +10,9 @@ export default function HeaderList({ auth, items }) {
     };
 
     return (
-        <AuthenticatedLayout user={auth.user} header="Header Content">
+        <AuthenticatedLayout
+            user={auth.user}
+            header="Header Content">
             <Head title="Header Content" />
 
             <div className="max-w-7xl mx-auto bg-white shadow rounded-md overflow-hidden border">

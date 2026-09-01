@@ -155,6 +155,32 @@ export default function Create({ auth }) {
                         </select>
                     </div>
 
+                    {/* META */}
+                    <div>
+                        <label className="block font-semibold text-gray-700 mb-1">
+                            SEO
+                        </label>
+                        <input
+                            value={data.meta_title}
+                            onChange={(e) =>
+                                setData("meta_title", e.target.value)
+                            }
+                            placeholder="Meta Title"
+                            className="w-full border rounded-md px-4 py-2 mb-2"
+                        />
+                    </div>
+                    <div>
+                        <textarea
+                            rows="3"
+                            value={data.meta_description}
+                            onChange={(e) =>
+                                setData("meta_description", e.target.value)
+                            }
+                            placeholder="Meta Description"
+                            className="w-full border rounded-md px-4 py-2"
+                        />
+                    </div>
+
                     {/* ACTIONS */}
                     <div className="flex flex-col sm:flex-row justify-between items-center gap-3 pt-4">
                         <Link

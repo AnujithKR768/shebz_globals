@@ -22,7 +22,8 @@ class CoachingProgramAdminController extends Controller
     public function create()
     {
         return Inertia::render("Solutions/CoachingPrograms/Create", [
-            "coachingList" => CoachingMentorship::orderBy("id")->get(["id", "title"]),
+            "coachingList" => CoachingMentorship::orderBy("id")
+                ->get(["id", "title"]),
         ]);
     }
 
@@ -35,16 +36,22 @@ class CoachingProgramAdminController extends Controller
             "is_active" => "nullable|boolean",
         ]);
 
+        // Convert checkbox to boolean
+        $data["is_active"] = $request->boolean("is_active");
+
         CoachingProgram::create($data);
 
-        return redirect()->route("coachingprogram.admin.index")->with("success", "Program Added!");
+        return redirect()
+            ->route("coachingprogram.admin.index")
+            ->with("success", "Program Added!");
     }
 
     public function edit(CoachingProgram $coachingProgram)
     {
         return Inertia::render("Solutions/CoachingPrograms/Edit", [
             "item" => $coachingProgram,
-            "coachingList" => CoachingMentorship::orderBy("id")->get(["id", "title"]),
+            "coachingList" => CoachingMentorship::orderBy("id")
+                ->get(["id", "title"]),
         ]);
     }
 
@@ -57,14 +64,21 @@ class CoachingProgramAdminController extends Controller
             "is_active" => "nullable|boolean",
         ]);
 
+        $data["is_active"] = $request->boolean("is_active");
+
         $coachingProgram->update($data);
 
-        return redirect()->route("coachingprogram.admin.index")->with("success", "Program Updated!");
+        return redirect()
+            ->route("coachingprogram.admin.index")
+            ->with("success", "Program Updated!");
     }
 
     public function destroy(CoachingProgram $coachingProgram)
     {
         $coachingProgram->delete();
-        return redirect()->route("coachingprogram.admin.index")->with("success", "Program Deleted!");
+
+        return redirect()
+            ->route("coachingprogram.admin.index")
+            ->with("success", "Program Deleted!");
     }
 }

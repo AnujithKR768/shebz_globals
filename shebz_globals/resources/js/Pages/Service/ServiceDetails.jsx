@@ -1,5 +1,6 @@
 import React from "react";
 import AppLayout from "../Layout/AppLayout";
+import { Head } from "@inertiajs/react";
 
 export default function ServiceDetails({ service }) {
     if (!service) {
@@ -18,8 +19,10 @@ export default function ServiceDetails({ service }) {
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col">
-
-
+            <Head>
+                <title>{service?.meta_title || "Service Details"}</title>
+            </Head>
+            <meta name="description" content={service?.meta_description || "Service details page"} />
 
             {/* ================= SERVICE DETAILS ================= */}
             <section className="max-w-5xl w-full mx-auto px-4 sm:px-6 md:px-10 mt-24 mb-16">

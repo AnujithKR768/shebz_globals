@@ -14,6 +14,8 @@ export default function HeaderEdit({ auth, item }) {
         button_link: item.button_link || "/learn-more",
         banner_text: item.banner_text || "Saving Lives. Strengthening Safety.",
         is_active: item.is_active ? true : false,
+        meta_title: item.meta_title || "",
+        meta_description: item.meta_description || "",
     });
 
     const submit = (e) => {
@@ -154,6 +156,30 @@ export default function HeaderEdit({ auth, item }) {
                             <option value="1">Active</option>
                             <option value="0">Inactive</option>
                         </select>
+                    </div>
+
+                    {/* SEO Meta */}
+                    <div>
+                        <label className="block font-semibold text-gray-700 mb-1">
+                            SEO
+                        </label>
+                        <input
+                            type="text"
+                            value={data.meta_title}
+                            onChange={(e) => setData("meta_title", e.target.value)}
+                            className="w-full border rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-500"
+                            placeholder="Meta Title"
+                        />
+                    </div>
+
+                    <div>
+                        <textarea
+                            rows="3"
+                            value={data.meta_description}
+                            onChange={(e) => setData("meta_description", e.target.value)}
+                            className="w-full border rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-500"
+                            placeholder="Meta Description"
+                        />
                     </div>
 
                     <div className="flex justify-between items-center pt-4">

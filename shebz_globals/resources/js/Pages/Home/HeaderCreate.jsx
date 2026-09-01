@@ -166,6 +166,30 @@ export default function HeaderCreate({ auth }) {
                         </select>
                     </div>
 
+                    {/* SEO Meta */}
+                    <div>
+                        <label className="block font-semibold text-gray-700 mb-1">
+                            SEO
+                        </label>
+                        <input
+                            type="text"
+                            value={data.meta_title}
+                            onChange={(e) => setData("meta_title", e.target.value)}
+                            className="w-full border rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-500"
+                            placeholder="Meta Title"
+                        />
+                    </div>
+
+                    <div>
+                        <textarea
+                            rows="3"
+                            value={data.meta_description}
+                            onChange={(e) => setData("meta_description", e.target.value)}
+                            className="w-full border rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-500"
+                            placeholder="Meta Description"
+                        />
+                    </div>
+
                     {/* BUTTONS */}
                     <div className="flex justify-between items-center pt-4">
                         <Link

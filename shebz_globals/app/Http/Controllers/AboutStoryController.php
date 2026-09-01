@@ -30,31 +30,17 @@ class AboutStoryController extends Controller
             "paragraph2" => "nullable|string",
             "image" => "nullable|image|mimes:jpg,jpeg,png,webp|max:10240",
             "is_active" => "nullable|boolean",
+            "meta_title" => "nullable|string|max:255",
+            "meta_description" => "nullable|string|max:255"
         ]);
 
-        //Hostinger-safe upload
+        // Upload image
         if ($request->hasFile("image")) {
-
-            // store in Laravel storage
-            $path = $request->file("image")->store("about_story", "public");
-
-            // ⭐ FORCE correct public_html path
-            $destination = base_path("public_html/storage/" . $path);
-
-            if (!is_dir(dirname($destination))) {
-                mkdir(dirname($destination), 0755, true);
-            }
-
-            @copy(
-                storage_path("app/public/" . $path),
-                $destination
-            );
-
-            $data["image"] = $path;
+            $data["image"] = $request->file("image")->store("about_story", "public");
         }
 
-        // only 1 active
-        if (!empty($data["is_active"]) && $data["is_active"] == true) {
+        // Only one active record
+        if (!empty($data["is_active"])) {
             AboutStory::where("is_active", true)->update(["is_active" => false]);
         }
 
@@ -73,78 +59,77 @@ class AboutStoryController extends Controller
     }
 
     public function update(Request $request, AboutStory $aboutStory)
-    {
-        $data = $request->validate([
-            "heading" => "required|string|max:255",
-            "title" => "required|string|max:255",
-            "paragraph1" => "nullable|string",
-            "paragraph2" => "nullable|string",
-            "image" => "nullable|image|mimes:jpg,jpeg,png,webp|max:10240",
-            "is_active" => "nullable|boolean",
-        ]);
+{
+    $data = $request->validate([
+        "heading" => "required|string|max:255",
+        "title" => "required|string|max:255",
+        "paragraph1" => "nullable|string",
+        "paragraph2" => "nullable|string",
+        "image" => "nullable|image|mimes:jpg,jpeg,png,webp|max:10240",
+        "is_active" => "nullable|boolean",
+        "meta_title" => "nullable|string|max:255",
+        "meta_description" => "nullable|string|max:255",
+    ]);
 
-        $data["is_active"] = $request->boolean("is_active");
+    // Convert checkbox value to boolean
+    $data["is_active"] = $request->boolean("is_active");
 
-        if ($request->hasFile("image")) {
 
-            // delete old Laravel file
-            if ($aboutStory->image &&
-                Storage::disk("public")->exists($aboutStory->image)) {
-                Storage::disk("public")->delete($aboutStory->image);
-            }
+    /*
+    Image
+    */
+    if ($request->hasFile("image")) {
 
-            // delete old public file
-            $oldPublic = base_path("public_html/storage/" . $aboutStory->image);
-            if ($aboutStory->image && file_exists($oldPublic)) {
-                @unlink($oldPublic);
-            }
-
-            // store new
-            $path = $request->file("image")->store("about_story", "public");
-
-            // FORCE correct destination
-            $destination = base_path("public_html/storage/" . $path);
-
-            if (!is_dir(dirname($destination))) {
-                mkdir(dirname($destination), 0755, true);
-            }
-
-            @copy(
-                storage_path("app/public/" . $path),
-                $destination
-            );
-
-            $data["image"] = $path;
-
-        } else {
-            unset($data["image"]);
-        }
-
-        // ensure only one active record
-        if ($data["is_active"] === true) {
-            AboutStory::where("id", "!=", $aboutStory->id)
-                ->update(["is_active" => false]);
-        }
-
-        $aboutStory->update($data);
-
-        return redirect()
-            ->route("aboutstory.admin.index")
-            ->with("success", "About Story Updated!");
-    }
-
-    public function destroy(AboutStory $aboutStory)
-    {
-        // delete Laravel file
-        if ($aboutStory->image &&
-            Storage::disk("public")->exists($aboutStory->image)) {
+        // Delete old image
+        if (
+            $aboutStory->image &&
+            Storage::disk("public")->exists($aboutStory->image)
+        ) {
             Storage::disk("public")->delete($aboutStory->image);
         }
 
-        // delete public file
-        $publicFile = base_path("public_html/storage/" . $aboutStory->image);
-        if ($aboutStory->image && file_exists($publicFile)) {
-            @unlink($publicFile);
+        // Store new image
+        $data["image"] = $request
+            ->file("image")
+            ->store("about_story", "public");
+
+    } else {
+
+        // No new image selected.
+        // Remove image from update data so the old image remains unchanged.
+        unset($data["image"]);
+    }
+
+
+    /*
+    ONLY ONE ACTIVE RECORD
+    */
+    if ($data["is_active"]) {
+
+        AboutStory::where("id", "!=", $aboutStory->id)
+            ->update([
+                "is_active" => false
+            ]);
+    }
+
+
+    /*
+    UPDATE
+    */
+
+    $aboutStory->update($data);
+
+
+    return redirect()
+        ->route("aboutstory.admin.index")
+        ->with("success", "About Story Updated!");
+}
+
+    public function destroy(AboutStory $aboutStory)
+    {
+        // Delete image
+        if ($aboutStory->image && Storage::disk("public")->exists($aboutStory->image)) {
+            Storage::disk("public")->delete($aboutStory->image);
         }
 
         $aboutStory->delete();

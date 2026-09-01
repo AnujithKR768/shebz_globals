@@ -17,6 +17,8 @@ export default function Edit({ auth, item }) {
         why_description: item?.why_description || "",
 
         is_active: item?.is_active ? true : false,
+        meta_title: item?.meta_title || "",
+        meta_description: item?.meta_description || "",
     });
 
     const submit = (e) => {
@@ -202,6 +204,27 @@ export default function Edit({ auth, item }) {
                             <option value="1">Active</option>
                             <option value="0">Inactive</option>
                         </select>
+                    </div>
+
+                    {/* SEO */}
+                    <div>
+                        <label className="font-semibold">SEO</label>
+                        <input
+                            type="text"
+                            value={data.meta_title}
+                            onChange={(e) => setData("meta_title", e.target.value)}
+                            className="w-full border rounded-md px-4 py-2"
+                            placeholder="Meta Title"
+                        />
+                    </div>
+                    <div>
+                        <textarea
+                            rows="3"
+                            value={data.meta_description}
+                            onChange={(e) => setData("meta_description", e.target.value)}
+                            className="w-full border rounded-md px-4 py-2"
+                            placeholder="Meta Description"
+                        />
                     </div>
 
                     {/* ACTION */}

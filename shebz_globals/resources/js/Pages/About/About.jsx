@@ -1,13 +1,17 @@
 import React from "react";
 import { assets } from "@/assets/assets";
 import AppLayout from "@/Pages/Layout/AppLayout";
-import { usePage } from "@inertiajs/react";
+import { usePage, Head } from "@inertiajs/react";
 
 export default function About() {
     const { story, mission, vision, coreValues, founderMessage } = usePage().props;
 
     return (
         <div className="bg-gray-100">
+
+            <Head>
+                <title>About Us</title>
+            </Head>
 
             {/* ================= HERO / STORY ================= */}
             <section className="bg-white">

@@ -1,7 +1,7 @@
 import React from "react";
 import AppLayout from "../Layout/AppLayout";
 import { assets } from "../../assets/assets.js";
-import { usePage } from "@inertiajs/react";
+import { usePage, Head } from "@inertiajs/react";
 
 export default function Solutions() {
     const page = usePage().props || {};
@@ -13,12 +13,21 @@ export default function Solutions() {
     const coaching = page.coaching || null;
     const coachingPrograms = page.coachingPrograms || [];
 
+
     return (
         <div className="max-w-7xl mx-auto px-6 py-12 space-y-20">
 
+            <Head>
+                <title>{page?.meta_title || "Solutions"}</title>
+                <meta
+                    name="description"
+                    content={page?.meta_description || ""}
+                />
+            </Head>
+
             {/* ================= SOLUTIONS ================= */}
             <section>
-                <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-10">
+                <h1 className="text-3xl md:text-4xl font-bold text-[#0025cc] text-center mb-10">
                     Our Solutions
                 </h1>
 

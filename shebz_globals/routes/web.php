@@ -34,12 +34,12 @@ use Inertia\Inertia;
 Route::get('/', [ViewController::class, 'home'])->name('home');
 
 Route::get('service',[DashboardController::class,'service']) -> name('service');
-// Route::get('navbar',[DashboardController::class,'navbar']) -> name('navbar');
-// Route::get('footer', [DashboardController::class, 'footer'])->name('footer');
+
 Route::post('/service', [DashboardController::class, 'store']) -> name('service.store');
 Route::get('/service/{id}/edit',[DashboardController::class,'ServiceUpdate']) -> name('service.edit');
-Route::post('/service/{id}', [DashboardController::class, 'update']) -> name('service.update');
+Route::put('/service/{id}', [DashboardController::class, 'update']) -> name('service.update');
 Route::delete('/service/{id}', [DashboardController::class, 'destroy']) -> name('service.destroy');
+
 Route::get('/quote-requests', [DashboardController::class, 'quoterequests']) -> name('quote.requests');
 Route::get('/contact-list', [DashboardController::class, 'contactlist']) -> name('contact.list');
 Route::get('/dashboard', [DashboardController::class, 'dashboard'])
@@ -103,6 +103,8 @@ Route::get('Terms',[ViewController::class,'Terms']) -> name('terms');
 Route::get('PrivacyPolicy',[ViewController::class,'PrivacyPolicy']) -> name('privacypolicy');
 Route::get('quote-form',[ViewController::class,'QuoteForm']) -> name('quote.form');
 Route::get('/learn-more', [ViewController::class, 'show'])->name('learnmore');
+Route::get('/Blog', [ViewController::class, 'Blog'])->name('blog.view');
+Route::get('/blog/details/{id}', [ViewController::class, 'blogDetails'])->name('blog.details');
 
 
 Route::post('/contact-send', [ContactController::class, 'send']) -> name('contact.send');
@@ -283,5 +285,13 @@ Route::middleware(['auth', 'permission:testimonials'])->group(function () {
 
 });
 
+Route::get('/blog', [DashboardController::class, 'blogIndex'])->name('blog.index');
+Route::get('/blog/create', [DashboardController::class, 'blogCreate'])->name('blog.create');
+Route::post('/blog/store', [DashboardController::class, 'blogStore'])->name('blog.store');
+Route::get('/blog/{id}/edit', [DashboardController::class, 'blogEdit'])->name('blog.edit');
+Route::put('/blog/update/{id}', [DashboardController::class, 'blogUpdate'])->name('blog.update');
+Route::delete('/blog/delete/{id}', [DashboardController::class, 'blogDestroy'])->name('blog.destroy');
+
+Route::post('/blog/content-image',[DashboardController::class, 'blogContentImage'])->name('blog.content-image');
 
 require __DIR__.'/auth.php';

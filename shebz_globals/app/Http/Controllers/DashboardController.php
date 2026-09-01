@@ -12,9 +12,11 @@ use App\Models\QuoteRequest;
 use App\Models\ContactList;
 use App\Models\User;
 use App\Models\MissionVision;
+use App\Models\Blog;
 
 class DashboardController extends Controller
 {
+
     /* =====================================================
      * SERVICES
      * ===================================================== */
@@ -31,28 +33,20 @@ class DashboardController extends Controller
         $validated = $request->validate([
             'icon'        => 'required|image|max:40960',
             'title'       => 'required|string|max:255',
+            'category'    => 'required|in:Website,SEO,Consultation,Socialmedia',
             'description' => 'required|string',
+            'meta_title' => 'nullable|string|max:1024',
+            'meta_description' => 'nullable|string|max:1024',
         ]);
 
         if ($request->hasFile('icon')) {
-
-            $path = $request->file('icon')->store('services', 'public');
-
-            // ⭐ FORCE public_html
-            $destination = base_path('public_html/storage/' . $path);
-
-            if (!is_dir(dirname($destination))) {
-                mkdir(dirname($destination), 0755, true);
-            }
-
-            @copy(storage_path('app/public/' . $path), $destination);
-
-            $validated['icon'] = $path;
+            $validated['icon'] = $request->file('icon')->store('services', 'public');
         }
 
         OurService::create($validated);
 
-        return redirect()->route('service')->with('success', 'Service added successfully');
+        return redirect()->route('service')
+            ->with('success', 'Service added successfully');
     }
 
     public function ServiceUpdate($id)
@@ -68,35 +62,20 @@ class DashboardController extends Controller
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
+            'category' => 'required|in:Website,SEO,Consultation,Socialmedia',
             'description' => 'required|string',
-            'icon' => 'nullable|image|mimes:png,jpg,jpeg,svg|max:40960',
+            'icon' => 'nullable|image|mimes:png,jpg,jpeg,svg,webp|max:40960',
+            'meta_title' => 'nullable|string|max:1024',
+            'meta_description' => 'nullable|string|max:1024',
         ]);
 
         if ($request->hasFile('icon')) {
 
-            // delete Laravel file
             if ($service->icon && Storage::disk('public')->exists($service->icon)) {
                 Storage::disk('public')->delete($service->icon);
             }
 
-            // delete public_html file
-            $oldPublic = base_path('public_html/storage/' . $service->icon);
-            if ($service->icon && file_exists($oldPublic)) {
-                @unlink($oldPublic);
-            }
-
-            // store new
-            $path = $request->file('icon')->store('services', 'public');
-
-            $destination = base_path('public_html/storage/' . $path);
-
-            if (!is_dir(dirname($destination))) {
-                mkdir(dirname($destination), 0755, true);
-            }
-
-            @copy(storage_path('app/public/' . $path), $destination);
-
-            $validated['icon'] = $path;
+            $validated['icon'] = $request->file('icon')->store('services', 'public');
 
         } else {
             unset($validated['icon']);
@@ -104,7 +83,8 @@ class DashboardController extends Controller
 
         $service->update($validated);
 
-        return redirect()->route('service')->with('success', 'Service updated successfully!');
+        return redirect()->route('service')
+            ->with('success', 'Service updated successfully!');
     }
 
     public function destroy($id)
@@ -113,11 +93,6 @@ class DashboardController extends Controller
 
         if ($service->icon && Storage::disk('public')->exists($service->icon)) {
             Storage::disk('public')->delete($service->icon);
-        }
-
-        $publicFile = base_path('public_html/storage/' . $service->icon);
-        if ($service->icon && file_exists($publicFile)) {
-            @unlink($publicFile);
         }
 
         $service->delete();
@@ -221,7 +196,8 @@ class DashboardController extends Controller
             'permissions' => $permissions,
         ]);
 
-        return redirect()->route('user.user')->with('success', 'User created successfully!');
+        return redirect()->route('user.user')
+            ->with('success', 'User created successfully!');
     }
 
     public function editUser(User $user)
@@ -254,7 +230,8 @@ class DashboardController extends Controller
             'permissions' => $permissions,
         ]);
 
-        return redirect()->route('user.user')->with('success', 'User updated successfully!');
+        return redirect()->route('user.user')
+            ->with('success', 'User updated successfully!');
     }
 
     public function deleteUser(User $user)
@@ -298,23 +275,13 @@ class DashboardController extends Controller
         $data["is_active"] = $request->boolean("is_active");
 
         if ($request->hasFile("image")) {
-
-            $path = $request->file("image")->store("mission_vision", "public");
-
-            $destination = base_path('public_html/storage/' . $path);
-
-            if (!is_dir(dirname($destination))) {
-                mkdir(dirname($destination), 0755, true);
-            }
-
-            @copy(storage_path('app/public/' . $path), $destination);
-
-            $data["image"] = $path;
+            $data["image"] = $request->file("image")->store("mission_vision", "public");
         }
 
         MissionVision::create($data);
 
-        return redirect()->route("missionvision.index")->with("success", "Saved Successfully!");
+        return redirect()->route("missionvision.index")
+            ->with("success", "Saved Successfully!");
     }
 
     public function editMV(MissionVision $missionVision)
@@ -342,22 +309,7 @@ class DashboardController extends Controller
                 Storage::disk("public")->delete($missionVision->image);
             }
 
-            $oldPublic = base_path('public_html/storage/' . $missionVision->image);
-            if ($missionVision->image && file_exists($oldPublic)) {
-                @unlink($oldPublic);
-            }
-
-            $path = $request->file("image")->store("mission_vision", "public");
-
-            $destination = base_path('public_html/storage/' . $path);
-
-            if (!is_dir(dirname($destination))) {
-                mkdir(dirname($destination), 0755, true);
-            }
-
-            @copy(storage_path('app/public/' . $path), $destination);
-
-            $data["image"] = $path;
+            $data["image"] = $request->file("image")->store("mission_vision", "public");
 
         } else {
             unset($data["image"]);
@@ -365,7 +317,8 @@ class DashboardController extends Controller
 
         $missionVision->update($data);
 
-        return redirect()->route("missionvision.index")->with("success", "Updated Successfully!");
+        return redirect()->route("missionvision.index")
+            ->with("success", "Updated Successfully!");
     }
 
     public function destroyMV(MissionVision $missionVision)
@@ -374,13 +327,119 @@ class DashboardController extends Controller
             Storage::disk("public")->delete($missionVision->image);
         }
 
-        $publicFile = base_path('public_html/storage/' . $missionVision->image);
-        if ($missionVision->image && file_exists($publicFile)) {
-            @unlink($publicFile);
-        }
-
         $missionVision->delete();
 
-        return redirect()->route("missionvision.index")->with("success", "Deleted Successfully!");
+        return redirect()->route("missionvision.index")
+            ->with("success", "Deleted Successfully!");
     }
+
+    // ============= BLOG ==============
+    public function blogIndex()
+    {
+        $posts = Blog::latest()->get();
+        return Inertia::render("Blog/index", [
+            "posts" => $posts
+        ]);
+    }
+
+    public function blogCreate()
+    {
+        return Inertia::render("Blog/create");
+    }
+
+    public function blogStore(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'image' => 'nullable|image|max:40960',
+            'meta_title' => 'nullable|string|max:1024',
+            'meta_description' => 'nullable|string|max:1024',
+        ]);
+
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('blog', 'public');
+        }
+
+        Blog::create($validated);
+
+        return redirect()->route('blog.index')
+            ->with('success', 'Blog post created successfully!');
+    }
+
+    public function blogEdit($id)
+    {
+        $post = Blog::findOrFail($id);
+        return Inertia::render("Blog/edit", [
+            "post" => $post
+        ]);
+    }
+
+    public function blogUpdate(Request $request, $id)
+    {
+        $post = Blog::findOrFail($id);
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'image' => 'nullable|image|max:40960',
+            'meta_title' => 'nullable|string|max:1024',
+            'meta_description' => 'nullable|string|max:1024',
+        ]);
+
+        if ($request->hasFile('image')) {
+
+            if ($post->image && Storage::disk('public')->exists($post->image)) {
+                Storage::disk('public')->delete($post->image);
+            }
+
+            $validated['image'] = $request->file('image')->store('blog', 'public');
+
+        } else {
+            unset($validated['image']);
+        }
+
+        $post->update($validated);
+
+        return redirect()->route('blog.index')
+            ->with('success', 'Blog post updated successfully!');
+    }
+
+    public function blogDestroy($id)
+    {
+        $post = Blog::findOrFail($id);
+
+        if ($post->image && Storage::disk('public')->exists($post->image)) {
+            Storage::disk('public')->delete($post->image);
+        }
+
+        $post->delete();
+
+        return redirect()->route('blog.index')
+            ->with('success', 'Blog post deleted successfully!');
+    }
+
+    public function blogContentImage(Request $request)
+    {
+        $request->validate([
+            'image' => [
+                'required',
+                'image',
+                'mimes:jpeg,jpg,png,gif,webp',
+                'max:5120',
+            ],
+        ]);
+
+        $path = $request->file('image')->store(
+            'blog/content',
+            'public'
+        );
+
+        return response()->json([
+            'success' => true,
+            'url' => '/storage/' . $path,
+        ]);
+    }
+
+
 }

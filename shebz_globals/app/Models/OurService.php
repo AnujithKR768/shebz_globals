@@ -10,8 +10,11 @@ class OurService extends Model
         protected $fillable = [
         'icon',
         'title',
+        'category',
         'description',
         'created_at',
         'updated_at',
+        'meta_title',
+        'meta_description'
     ];
 }

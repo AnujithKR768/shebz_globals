@@ -1,5 +1,5 @@
 import React from "react";
-import { useForm } from "@inertiajs/react";
+import { useForm, Head } from "@inertiajs/react";
 import AppLayout from "../Layout/AppLayout";
 import { FaWhatsapp, FaLinkedin, FaEnvelope } from "react-icons/fa";
 
@@ -44,9 +44,13 @@ export default function Contact({ content }) {
     return (
         <div className="bg-white">
 
+            <Head>
+                <title>Contact Us</title>
+            </Head>
+
             {/* PAGE HEADER */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pt-12 sm:pt-16 pb-10 text-center md:text-left">
-                <h1 className="text-2xl sm:text-3xl md:text-5xl font-semibold mb-4">
+                <h1 className="text-2xl sm:text-3xl md:text-5xl font-semibold mb-4 text-[#0025cc]">
                     {pageTitle}
                 </h1>
 

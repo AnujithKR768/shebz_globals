@@ -10,6 +10,8 @@ export default function Create({ auth }) {
         paragraph2: "",
         image: null,
         is_active: true,
+        meta_title: "",
+        meta_description: "",
     });
 
     const submit = (e) => {
@@ -87,7 +89,27 @@ export default function Create({ auth }) {
                         <option value="1">Active</option>
                         <option value="0">Inactive</option>
                     </select>
-
+                    {/* Meta */}
+                    <div>
+                        <lable className="block mb-1 font-medium text-gray-700">
+                            SEO
+                        </lable>
+                        <input
+                            value={data.meta_title}
+                            onChange={(e) => setData("meta_title", e.target.value)}
+                            className="w-full border rounded-md px-4 py-2"
+                            placeholder="Meta Title"
+                        />
+                    </div>
+                    <div>
+                        <textarea
+                            rows="2"
+                            value={data.meta_description}
+                            onChange={(e) => setData("meta_description", e.target.value)}
+                            className="w-full border rounded-md px-4 py-2"
+                            placeholder="Meta Description"
+                        />
+                    </div>
                     <div className="flex justify-between pt-4">
                         <Link href={route("aboutstory.admin.index")}>← Back</Link>
 

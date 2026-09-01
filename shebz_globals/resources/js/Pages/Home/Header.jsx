@@ -1,11 +1,12 @@
 import React from "react";
-import { Link, usePage } from "@inertiajs/react";
+import { Link, usePage, Head } from "@inertiajs/react";
 import AppLayout from "../Layout/AppLayout";
 
 export default function Header() {
     const {
         services = [],
         header,
+        blogs = [],
         mission,
         vision,
         founderMessage,
@@ -14,6 +15,11 @@ export default function Header() {
 
     return (
         <div className="w-full overflow-hidden">
+            <Head>
+                <title>{header?.meta_title || "Shebz Global"}</title>
+                <meta name="description" content={header?.meta_description || "Shebz Global"} />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+            </Head>
 
             {/* ================= HERO SECTION ================= */}
             <section className="relative w-full min-h-[70vh] md:min-h-[80vh] flex items-center">
@@ -67,7 +73,7 @@ export default function Header() {
 
             {/* ================= SERVICES GRID ================= */}
             <section className="max-w-[1400px] mx-auto px-6 md:px-10 mt-20">
-                <h2 className="text-2xl md:text-3xl font-bold text-[#0025cc] mb-10">
+                <h2 className="text-2xl md:text-3xl font-bold text-[#0025cc] mb-10 text-center">
                     Our Services
                 </h2>
 
@@ -101,35 +107,197 @@ export default function Header() {
                 </div>
             </section>
 
-            {/* ================= TESTIMONIALS ================= */}
-            <section className="bg-gray-50 py-16">
+            { /* ================= Articles ================= */}
+            <section className="bg-gray-50 py-16 md:py-20">
                 <div className="max-w-7xl mx-auto px-6">
 
-                    <div className="flex justify-between items-center mb-10">
-                        <h2 className="text-3xl font-bold text-[#0025cc]">
-                            Our Testimonials
+                    {/* SECTION HEADER */}
+                    <div className="relative mb-10">
+
+                        {/* CENTERED HEADING */}
+                        <h2 className="text-2xl md:text-3xl font-bold text-[#0025cc] text-center">
+                            Latest Articles
                         </h2>
+
+                        {/* RIGHT SIDE LINK */}
+                        <Link
+                            href="/Blog"
+                            className="
+                                absolute
+                                right-0
+                                top-1/2
+                                -translate-y-1/2
+                                text-[#0070ff]
+                                font-semibold
+                                text-sm md:text-base
+                                hover:underline
+                                flex items-center gap-1
+                            "
+                        >
+                            View All Articles
+                            <span className="text-lg">→</span>
+                        </Link>
+
                     </div>
 
-                    <Link
-                        href={route("testimonials.create")}
-                        className="bg-[#fddb2e] text-[#0025cc] px-4 py-2 rounded"
-                    >
-                        Feedback
-                    </Link>
+                    {/* ARTICLES */}
+                    {blogs.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
-                    <div className="grid md:grid-cols-3 gap-8">
-                        {testimonials.length > 0 ? (
-                            testimonials.map((item) => (
+                            {blogs.slice(0, 3).map((blog) => (
+                                <Link
+                                    key={blog.id}
+                                    href={`/blog/details/${blog.id}`}
+                                    className="
+                                        group
+                                        bg-white
+                                        rounded-2xl
+                                        overflow-hidden
+                                        shadow-sm
+                                        hover:shadow-xl
+                                        transition-all
+                                        duration-300
+                                    "
+                                >
+
+                                    {/* IMAGE */}
+                                    <div className="h-52 overflow-hidden">
+                                        {blog.image ? (
+                                            <img
+                                                src={`/storage/${blog.image}`}
+                                                alt={blog.title || "Blog"}
+                                                className="
+                                                    w-full
+                                                    h-full
+                                                    object-cover
+                                                    transition-transform
+                                                    duration-500
+                                                    group-hover:scale-105
+                                                "
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                                                <span className="text-gray-400">
+                                                    No Image
+                                                </span>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* CONTENT */}
+                                    <div className="p-6">
+
+                                        {/* CATEGORY */}
+                                        <div className="mb-4">
+                                            <span
+                                                className="
+                                                    inline-block
+                                                    px-3 py-1
+                                                    rounded-full
+                                                    bg-blue-50
+                                                    text-[#0070ff]
+                                                    text-xs
+                                                    font-semibold
+                                                "
+                                            >
+                                                {blog.category || "Industry Insight"}
+                                            </span>
+                                        </div>
+
+                                        {/* TITLE */}
+                                        <h3
+                                            className="
+                                                text-lg
+                                                md:text-xl
+                                                font-bold
+                                                text-gray-900
+                                                leading-snug
+                                                group-hover:text-[#0025cc]
+                                                transition
+                                            "
+                                        >
+                                            {blog.title}
+                                        </h3>
+
+                                    </div>
+                                </Link>
+                            ))}
+
+                        </div>
+                    ) : (
+                        <p className="text-center text-gray-500 py-10">
+                            No articles available.
+                        </p>
+                    )}
+
+                </div>
+            </section>
+
+            {/* ================= TESTIMONIALS ================= */}
+            <section className="bg-gray-50 py-16 md:py-20">
+                <div className="max-w-7xl mx-auto px-6">
+
+                    {/* SECTION HEADER */}
+                    <div className="mb-10">
+
+                        {/* CENTERED TITLE */}
+                        <h2 className="text-2xl md:text-3xl font-bold text-[#0025cc] text-center">
+                            Testimonials
+                        </h2>
+
+                        {/* FEEDBACK BUTTON - LEFT */}
+                        <div className="mt-5 text-left">
+                            <Link
+                                href={route("testimonials.create")}
+                                className="
+                                    inline-block
+                                    bg-[#fddb2e]
+                                    text-[#0025cc]
+                                    px-5
+                                    py-2.5
+                                    rounded-lg
+                                    font-semibold
+                                    text-sm
+                                    hover:bg-yellow-300
+                                    transition
+                                "
+                            >
+                                Feedback
+                            </Link>
+                        </div>
+
+                    </div>
+
+
+                    {/* TESTIMONIALS */}
+                    {testimonials.length > 0 ? (
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                            {testimonials.map((item) => (
                                 <div
                                     key={item.id}
-                                    className="bg-white p-8 rounded-2xl shadow hover:shadow-lg transition"
+                                    className="
+                                        bg-white
+                                        p-8
+                                        rounded-2xl
+                                        shadow-sm
+                                        hover:shadow-lg
+                                        transition
+                                    "
                                 >
+
                                     {item?.image && (
                                         <img
                                             src={`/storage/${item.image}`}
                                             alt={item.name}
-                                            className="w-16 h-16 rounded-full mb-4 object-cover"
+                                            className="
+                                                w-16
+                                                h-16
+                                                rounded-full
+                                                mb-4
+                                                object-cover
+                                            "
                                         />
                                     )}
 
@@ -144,73 +312,22 @@ export default function Header() {
                                     <p className="text-sm text-gray-500">
                                         {item.designation}
                                     </p>
+
                                 </div>
-                            ))
-                        ) : (
-                            <p>No testimonials available.</p>
-                        )}
-                    </div>
-                </div>
-            </section>
+                            ))}
 
-            {/* ================= MISSION ================= */}
-            <section className="bg-gradient-to-r from-white to-[#0025cc] py-16 md:py-24">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-
-                    <div>
-                        <h2 className="text-2xl md:text-3xl font-semibold text-blue-900 mb-4">
-                            {mission?.title || "Our Mission"}
-                        </h2>
-
-                        <p className="text-black leading-relaxed text-base md:text-lg">
-                            {mission?.description || ""}
-                        </p>
-                    </div>
-
-                    <div className="flex justify-center">
-                        <div className="bg-white p-6 rounded-2xl shadow-xl max-w-sm md:max-w-md">
-                            {mission?.image ? (
-                                <img
-                                    src={`/storage/${mission.image}`}
-                                    alt="Our Mission"
-                                    className="w-full h-auto object-contain"
-                                />
-                            ) : (
-                                <span className="text-gray-400">No Image</span>
-                            )}
                         </div>
-                    </div>
 
-                </div>
-            </section>
+                    ) : (
 
-            {/* ================= VISION ================= */}
-            <section className="py-16 md:py-24 bg-gradient-to-r from-[#fddb2e] to-white">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-
-                    <div className="flex justify-center order-2 lg:order-1">
-                        <div className="bg-white p-6 rounded-2xl shadow-xl max-w-sm md:max-w-md">
-                            {vision?.image ? (
-                                <img
-                                    src={`/storage/${vision.image}`}
-                                    alt="Our Vision"
-                                    className="w-full h-auto object-contain"
-                                />
-                            ) : (
-                                <span className="text-gray-400">No Image</span>
-                            )}
+                        /* EMPTY STATE - CENTER */
+                        <div className="text-center py-10">
+                            <p className="text-gray-500 text-base">
+                                No testimonials available.
+                            </p>
                         </div>
-                    </div>
 
-                    <div className="order-1 lg:order-2">
-                        <h2 className="text-2xl md:text-3xl font-semibold text-blue-900 mb-4">
-                            {vision?.title || "Our Vision"}
-                        </h2>
-
-                        <p className="text-black leading-relaxed text-base md:text-lg">
-                            {vision?.description || ""}
-                        </p>
-                    </div>
+                    )}
 
                 </div>
             </section>

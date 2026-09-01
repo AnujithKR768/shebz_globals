@@ -23,24 +23,8 @@ class TestimonialController extends Controller
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:10240',
         ]);
 
-        // ✅ HOSTINGER-SAFE UPLOAD
         if ($request->hasFile('image')) {
-
-            $path = $request->file('image')->store('testimonials', 'public');
-
-            // ⭐ FORCE public_html
-            $destination = base_path('public_html/storage/' . $path);
-
-            if (!is_dir(dirname($destination))) {
-                mkdir(dirname($destination), 0755, true);
-            }
-
-            @copy(
-                storage_path('app/public/' . $path),
-                $destination
-            );
-
-            $data['image'] = $path;
+            $data['image'] = $request->file('image')->store('testimonials', 'public');
         }
 
         Testimonial::create($data);
@@ -61,18 +45,11 @@ class TestimonialController extends Controller
     {
         $testimonial = Testimonial::findOrFail($id);
 
-        // delete Laravel file
         if (
             $testimonial->image &&
             Storage::disk('public')->exists($testimonial->image)
         ) {
             Storage::disk('public')->delete($testimonial->image);
-        }
-
-        // delete public_html file
-        $publicFile = base_path('public_html/storage/' . $testimonial->image);
-        if ($testimonial->image && file_exists($publicFile)) {
-            @unlink($publicFile);
         }
 
         $testimonial->delete();

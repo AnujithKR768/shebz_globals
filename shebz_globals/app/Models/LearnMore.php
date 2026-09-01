@@ -16,6 +16,8 @@ class LearnMore extends Model
         'why_title',
         'why_description',
         'is_active',
+        'meta_title',
+        'meta_description',
     ];
 
     protected $casts = [
